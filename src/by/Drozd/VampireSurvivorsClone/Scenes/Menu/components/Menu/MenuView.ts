@@ -18,7 +18,7 @@ export class MenuView extends UIComponent {
   }
 
   private setBackgroundImage(): void {
-    let backgroundImage: UIComponent = PIXI.Sprite.from(
+    const backgroundImage: UIComponent = PIXI.Sprite.from(
       this.menuModel.getBackgroundImage()
     );
     backgroundImage.width = App.width;
@@ -27,15 +27,17 @@ export class MenuView extends UIComponent {
   }
 
   private setButtons(): void {
-    let button = new Button("Play", this.startGameScene);
-    console.log(button.width);
-    console.log(button.height);
-    button.x = (App.width / 2) - (button.getWidth() / 2);
-    button.y = (App.height / 2) - (button.getHeight() / 2);
-    this.addChild(button);
+    this.setButtonPlay();
   }
 
-  private startGameScene(): void {
-    Game.showGameScene();
+  private setButtonPlay(): void {
+    const buttonPlay = new Button("Play", this.GameStartButtonIsPressed);
+    buttonPlay.x = (App.width / 2) - (buttonPlay.getWidth() / 2);
+    buttonPlay.y = (App.height / 2) - (buttonPlay.getHeight() / 2);
+    this.addChild(buttonPlay);
+  }
+
+  private GameStartButtonIsPressed(): void {
+    this.menuController.GameStartButtonIsPressed();
   }
 }

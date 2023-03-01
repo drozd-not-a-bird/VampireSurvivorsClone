@@ -1,4 +1,5 @@
 import { Texture } from "pixi.js";
+import { Game } from "../../../../Game";
 import { MenuConfig } from "../../Configs/MenuConfig";
 
 export class MenuModel {
@@ -10,5 +11,9 @@ export class MenuModel {
 
   public getBackgroundImage(): Texture {
     return this.backgroundImage;
+  }
+   
+  public startGameScene(): void {
+    Game.showGameScene();
   }
 }

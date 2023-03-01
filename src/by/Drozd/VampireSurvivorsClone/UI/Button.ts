@@ -8,7 +8,6 @@ export class Button extends UIComponent {
   constructor(
     label: string,
     onClickFuncktion: Function,
-    texture?: PIXI.Texture
   ) {
     super();
     this.buttonMode = true;

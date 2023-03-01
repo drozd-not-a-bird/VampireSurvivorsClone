@@ -1,7 +1,7 @@
 import { PlayerConfig } from "../../Configs/PlayerConfig";
 import { AttackType } from "../AttackType/AttackType";
 
-export abstract class Player {
+export class PlayerModel {
   health: number;
   movementSpeed: number;
   attackSpeed: number;
@@ -18,6 +18,4 @@ export abstract class Player {
     this.attackType = playerConfig.attackType;
     console.log("Player was created!");
   }
-
-  
 }

@@ -9,10 +9,10 @@ export class BackgroundConfig {
   public readonly textureHeight: number;
 
   public constructor() {
-    this.textureForBackground = Texture.from("./assets/Backgrounds/tile1.png");
+    this.textureForBackground = Texture.from("./assets/Backgrounds/Tiles/tile6.png");
     this.stepsInWidth = 15;
     this.stepsInHeight = 20;
-    this.textureScale = 2;
+    this.textureScale = 4;
     this.textureWidth = 64;
     this.textureHeight = 64;
   }

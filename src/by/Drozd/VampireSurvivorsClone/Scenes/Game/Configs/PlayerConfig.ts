@@ -1,12 +1,14 @@
+import { AnimatedSprite } from "pixi.js";
 import { AttackType } from "../Components/AttackType/AttackType";
 
 export class PlayerConfig {
-  health: number;
-  movementSpeed: number;
-  attackSpeed: number;
-  attackRange: number;
-  damage: number;
-  attackType: AttackType;
+  public health: number;
+  public movementSpeed: number;
+  public attackSpeed: number;
+  public attackRange: number;
+  public damage: number;
+  public attackType: AttackType;
+  public playerAnimationStaying: AnimatedSprite;
 
   constructor() {
     this.health = 50;
@@ -15,5 +17,7 @@ export class PlayerConfig {
     this.attackRange = 1;
     this.damage = 1;
     this.attackType = AttackType.weakSwordStrike;
+    //const spritesheet = new PIXI.Spritesheet(PIXI.BaseTexture.from("assets/Player/playerStaying.json").);
+    //this.playerAnimationStaying = PIXI.AnimatedSprite.from("assets/Player/playerStaying.json")
   }
 }

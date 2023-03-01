@@ -6,4 +6,8 @@ export class MenuController {
   public constructor(menuModel: MenuModel) {
     this.menuModel = menuModel;
   }
+
+  public GameStartButtonIsPressed(): void {
+    this.menuModel.startGameScene();
+  }
 }
