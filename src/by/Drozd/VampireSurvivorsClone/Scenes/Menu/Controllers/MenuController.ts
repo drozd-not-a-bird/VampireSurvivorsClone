@@ -2,13 +2,13 @@ import { IMenuModel } from "../Models/IMenuModel";
 import { IMenuController } from "./IMenuController";
 
 export class MenuController implements IMenuController {
-  private menuModel: IMenuModel;
+  private static menuModel: IMenuModel;
 
   public constructor(menuModel: IMenuModel) {
-    this.menuModel = menuModel;
+    MenuController.menuModel = menuModel;
   }
 
   public GameStartButtonIsPressed(): void {
-    this.menuModel.startGameScene();
+    MenuController.menuModel.startGameScene();
   }
 }

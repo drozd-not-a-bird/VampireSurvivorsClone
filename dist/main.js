@@ -44204,14 +44204,12 @@ class GameScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scen
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuController", function() { return MenuController; });
-/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
-
 class MenuController {
     constructor(menuModel) {
-        this.menuModel = menuModel;
+        MenuController.menuModel = menuModel;
     }
     GameStartButtonIsPressed() {
-        _Game__WEBPACK_IMPORTED_MODULE_0__["Game"].showGameScene();
+        MenuController.menuModel.startGameScene();
     }
 }
 
