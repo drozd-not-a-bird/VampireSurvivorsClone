@@ -1,5 +1,5 @@
-import { Scene } from "../../../../../SceneManagment/Scene";
-import { MenuView } from "./components/Menu/MenuView";
+import { Scene } from "../../SceneManagment/Scene";
+import { MenuView } from "./Views/MenuView";
 
 export class MenuScene extends Scene {
   constructor(menuView: MenuView) {

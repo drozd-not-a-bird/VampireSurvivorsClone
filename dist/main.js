@@ -43770,53 +43770,6 @@ App.resolution = 0.42;
 
 /***/ }),
 
-/***/ "./src/SceneManagment/Scene.ts":
-/*!*************************************!*\
-  !*** ./src/SceneManagment/Scene.ts ***!
-  \*************************************/
-/*! exports provided: Scene */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Scene", function() { return Scene; });
-/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
-
-class Scene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Container"] {
-}
-
-
-/***/ }),
-
-/***/ "./src/SceneManagment/SceneManager.ts":
-/*!********************************************!*\
-  !*** ./src/SceneManagment/SceneManager.ts ***!
-  \********************************************/
-/*! exports provided: SceneManager */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SceneManager", function() { return SceneManager; });
-class SceneManager {
-    constructor(root) {
-        this.root = root;
-    }
-    show(scene) {
-        if (this.currentScene !== undefined) {
-            this.onloadCurrentScene();
-        }
-        this.root.addChild(scene);
-        this.currentScene = scene;
-    }
-    onloadCurrentScene() {
-        this.root.removeChild(this.currentScene);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/by/Drozd/VampireSurvivorsClone/Game.ts":
 /*!****************************************************!*\
   !*** ./src/by/Drozd/VampireSurvivorsClone/Game.ts ***!
@@ -43827,17 +43780,17 @@ class SceneManager {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
-/* harmony import */ var _SceneManagment_SceneManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../SceneManagment/SceneManager */ "./src/SceneManagment/SceneManager.ts");
+/* harmony import */ var _SceneManagment_SceneManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SceneManagment/SceneManager */ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/SceneManager.ts");
 /* harmony import */ var _Scenes_Game_GameScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Scenes/Game/GameScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/GameScene.ts");
 /* harmony import */ var _Scenes_Game_Configs_LevelConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Scenes/Game/Configs/LevelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/LevelConfig.ts");
 /* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldModel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldModel.ts");
 /* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldController__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldController.ts");
 /* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldView.ts");
-/* harmony import */ var _Scenes_Menu_Configs_MenuConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Scenes/Menu/Configs/MenuConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Configs/MenuConfig.ts");
-/* harmony import */ var _Scenes_Menu_components_Menu_MenuModel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Scenes/Menu/components/Menu/MenuModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuModel.ts");
-/* harmony import */ var _Scenes_Menu_components_Menu_MenuController__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Scenes/Menu/components/Menu/MenuController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuController.ts");
-/* harmony import */ var _Scenes_Menu_components_Menu_MenuView__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Scenes/Menu/components/Menu/MenuView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuView.ts");
-/* harmony import */ var _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Scenes/Menu/MenuScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/MenuScene.ts");
+/* harmony import */ var _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Scenes/Menu/Models/MenuModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Models/MenuModel.ts");
+/* harmony import */ var _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Scenes/Menu/Controllers/MenuController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Controllers/MenuController.ts");
+/* harmony import */ var _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Scenes/Menu/Views/MenuView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Views/MenuView.ts");
+/* harmony import */ var _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Scenes/Menu/MenuScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/MenuScene.ts");
+/* harmony import */ var _Scenes_Menu_Resources_MenuViewModel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Scenes/Menu/Resources/MenuViewModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts");
 
 
 
@@ -43864,11 +43817,58 @@ class Game {
         this.sceneManager.show(new _Scenes_Game_GameScene__WEBPACK_IMPORTED_MODULE_1__["GameScene"](gamefieldView));
     }
     static showMenuScene() {
-        const menuConfig = new _Scenes_Menu_Configs_MenuConfig__WEBPACK_IMPORTED_MODULE_6__["MenuConfig"]();
-        const menuModel = new _Scenes_Menu_components_Menu_MenuModel__WEBPACK_IMPORTED_MODULE_7__["MenuModel"](menuConfig);
-        const menuController = new _Scenes_Menu_components_Menu_MenuController__WEBPACK_IMPORTED_MODULE_8__["MenuController"](menuModel);
-        const menuView = new _Scenes_Menu_components_Menu_MenuView__WEBPACK_IMPORTED_MODULE_9__["MenuView"](menuModel, menuController);
-        this.sceneManager.show(new _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_10__["MenuScene"](menuView));
+        const menuModel = new _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_6__["MenuModel"]();
+        const menuController = new _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_7__["MenuController"](menuModel);
+        const menuViewModel = new _Scenes_Menu_Resources_MenuViewModel__WEBPACK_IMPORTED_MODULE_10__["MenuViewModel"]();
+        const menuView = new _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_8__["MenuView"](menuController, menuViewModel);
+        this.sceneManager.show(new _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_9__["MenuScene"](menuView));
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/Scene.ts":
+/*!********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/SceneManagment/Scene.ts ***!
+  \********************************************************************/
+/*! exports provided: Scene */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Scene", function() { return Scene; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+
+class Scene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Container"] {
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/SceneManager.ts":
+/*!***************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/SceneManagment/SceneManager.ts ***!
+  \***************************************************************************/
+/*! exports provided: SceneManager */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SceneManager", function() { return SceneManager; });
+class SceneManager {
+    constructor(root) {
+        this.root = root;
+    }
+    show(scene) {
+        if (this.currentScene !== undefined) {
+            this.onloadCurrentScene();
+        }
+        this.root.addChild(scene);
+        this.currentScene = scene;
+    }
+    onloadCurrentScene() {
+        this.root.removeChild(this.currentScene);
     }
 }
 
@@ -44182,7 +44182,7 @@ class PlayerConfig {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameScene", function() { return GameScene; });
-/* harmony import */ var _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../SceneManagment/Scene */ "./src/SceneManagment/Scene.ts");
+/* harmony import */ var _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SceneManagment/Scene */ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/Scene.ts");
 
 class GameScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scene"] {
     constructor(gamefieldView) {
@@ -44194,21 +44194,24 @@ class GameScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scen
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Configs/MenuConfig.ts":
-/*!******************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Configs/MenuConfig.ts ***!
-  \******************************************************************************/
-/*! exports provided: MenuConfig */
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Controllers/MenuController.ts":
+/*!**************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Controllers/MenuController.ts ***!
+  \**************************************************************************************/
+/*! exports provided: MenuController */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuConfig", function() { return MenuConfig; });
-/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuController", function() { return MenuController; });
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
 
-class MenuConfig {
-    constructor() {
-        this.textureForBackground = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Texture"].from("./assets/Backgrounds/menuBackground.jpg");
+class MenuController {
+    constructor(menuModel) {
+        this.menuModel = menuModel;
+    }
+    GameStartButtonIsPressed() {
+        _Game__WEBPACK_IMPORTED_MODULE_0__["Game"].showGameScene();
     }
 }
 
@@ -44225,7 +44228,7 @@ class MenuConfig {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuScene", function() { return MenuScene; });
-/* harmony import */ var _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../SceneManagment/Scene */ "./src/SceneManagment/Scene.ts");
+/* harmony import */ var _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SceneManagment/Scene */ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/Scene.ts");
 
 class MenuScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scene"] {
     constructor(menuView) {
@@ -44237,47 +44240,20 @@ class MenuScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scen
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuController.ts":
-/*!******************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuController.ts ***!
-  \******************************************************************************************/
-/*! exports provided: MenuController */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuController", function() { return MenuController; });
-class MenuController {
-    constructor(menuModel) {
-        this.menuModel = menuModel;
-    }
-    GameStartButtonIsPressed() {
-        this.menuModel.startGameScene();
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuModel.ts":
-/*!*************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuModel.ts ***!
-  \*************************************************************************************/
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Models/MenuModel.ts":
+/*!****************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Models/MenuModel.ts ***!
+  \****************************************************************************/
 /*! exports provided: MenuModel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuModel", function() { return MenuModel; });
-/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
 
 class MenuModel {
-    constructor(menuConfig) {
-        this.backgroundImage = menuConfig.textureForBackground;
-    }
-    getBackgroundImage() {
-        return this.backgroundImage;
-    }
+    constructor() { }
     startGameScene() {
         _Game__WEBPACK_IMPORTED_MODULE_0__["Game"].showGameScene();
     }
@@ -44286,111 +44262,136 @@ class MenuModel {
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuView.ts":
-/*!************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/components/Menu/MenuView.ts ***!
-  \************************************************************************************/
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts":
+/*!***********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts ***!
+  \***********************************************************************************/
+/*! exports provided: MenuViewModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuViewModel", function() { return MenuViewModel; });
+class MenuViewModel {
+    constructor() {
+        this.backgroundImage = "./assets/Backgrounds/menuBackground.jpg";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Views/MenuView.ts":
+/*!**************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Views/MenuView.ts ***!
+  \**************************************************************************/
 /*! exports provided: MenuView */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuView", function() { return MenuView; });
-/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
-/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../../Application */ "./src/Application.ts");
-/* harmony import */ var _UI_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../UI/Button */ "./src/by/Drozd/VampireSurvivorsClone/UI/Button.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuView", function() { return MenuView; });
+/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Buttons/MenuButton */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts");
+
 
 
 
 class MenuView extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor(menuModel, menuController) {
+    constructor(menuController, menuViewModel) {
         super();
-        this.menuModel = menuModel;
         this.menuController = menuController;
+        this.menuViewModel = menuViewModel;
         this.setBackgroundImage();
         this.setButtons();
     }
     setBackgroundImage() {
-        const backgroundImage = PIXI.Sprite.from(this.menuModel.getBackgroundImage());
+        const backgroundImage = pixi_js__WEBPACK_IMPORTED_MODULE_2__["Sprite"].from(this.menuViewModel.backgroundImage);
         backgroundImage.width = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width;
         backgroundImage.height = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height;
         this.addChild(backgroundImage);
     }
     setButtons() {
-        this.setButtonPlay();
+        this.setPlayButton();
     }
-    setButtonPlay() {
-        const buttonPlay = new _UI_Button__WEBPACK_IMPORTED_MODULE_2__["Button"]("Play", this.menuController.GameStartButtonIsPressed);
+    setPlayButton() {
+        const buttonPlay = new _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_3__["MenuButton"]("Play");
+        buttonPlay.on("click", this.menuController.GameStartButtonIsPressed);
         buttonPlay.x = (_Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2) - (buttonPlay.getWidth() / 2);
         buttonPlay.y = (_Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2) - (buttonPlay.getHeight() / 2);
         this.addChild(buttonPlay);
     }
-    GameStartButtonIsPressed() {
-        this.menuController.GameStartButtonIsPressed();
-    }
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Button.ts":
-/*!*********************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Button.ts ***!
-  \*********************************************************/
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/Button.ts":
+/*!*****************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/Button.ts ***!
+  \*****************************************************************/
 /*! exports provided: Button */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
-/* harmony import */ var _UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
+/* harmony import */ var _UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
 
 class Button extends _UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor(label, onClickFuncktion) {
+    constructor() {
         super();
         this.buttonMode = true;
         this.interactive = true;
+        this.setHoverEvents();
+    }
+    setHoverEvents() {
         this.on("pointerdown", this.onButtonDown)
-            .on("pointerup", onClickFuncktion)
-            .on("pointerupoutside", onClickFuncktion)
             .on("pointerover", this.onButtonOver)
             .on("pointerout", this.onButtonOut);
-        this.setLabel(label);
     }
     onButtonDown() {
         this.alpha = 0.5;
     }
-    //private onButtonUp() {}
     onButtonOver() {
         this.alpha = 0.75;
     }
     onButtonOut() {
         this.alpha = 1;
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/LabelButton.ts":
+/*!**********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/LabelButton.ts ***!
+  \**********************************************************************/
+/*! exports provided: LabelButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LabelButton", function() { return LabelButton; });
+/* harmony import */ var _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Style/TextStyle/DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Button */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/Button.ts");
+
+
+class LabelButton extends _Button__WEBPACK_IMPORTED_MODULE_1__["Button"] {
+    constructor(label) {
+        super();
+        this.setLabel(label);
+    }
     setLabel(label) {
-        this.label = label;
-        const style = new PIXI.TextStyle({
-            fontFamily: "Palatino Linotype",
-            fontSize: 80,
-            fontStyle: "italic",
-            fontWeight: "bold",
-            fill: ["#E0E0E0"],
-            stroke: "#4a1850",
-            strokeThickness: 5,
-            dropShadow: false,
-            dropShadowColor: "#000000",
-            dropShadowBlur: 4,
-            dropShadowAngle: Math.PI / 6,
-            dropShadowDistance: 6,
-            wordWrap: false,
-            wordWrapWidth: 440,
-            lineJoin: "round",
-        });
-        let text = new PIXI.Text(label, style);
-        this.addChild(text);
-        this.textWidth = text.width;
-        this.textHeight = text.height;
+        const style = new _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"];
+        let textElement = new PIXI.Text(label, style);
+        this.addChild(textElement);
+        this.textWidth = textElement.width;
+        this.textHeight = textElement.height;
+        this.textElement = textElement;
     }
     getWidth() {
         return this.textWidth;
@@ -44401,6 +44402,90 @@ class Button extends _UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
 }
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts":
+/*!*********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts ***!
+  \*********************************************************************/
+/*! exports provided: MenuButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuButton", function() { return MenuButton; });
+/* harmony import */ var _Style_TextStyle_MenuTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Style/TextStyle/MenuTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/MenuTextStyle.ts");
+/* harmony import */ var _LabelButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LabelButton */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/LabelButton.ts");
+
+
+class MenuButton extends _LabelButton__WEBPACK_IMPORTED_MODULE_1__["LabelButton"] {
+    constructor(label) {
+        super(label);
+        this.setMenuTextStyle();
+    }
+    setMenuTextStyle() {
+        this.textElement.style = new _Style_TextStyle_MenuTextStyle__WEBPACK_IMPORTED_MODULE_0__["MenuTextStyle"]();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts":
+/*!***********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts ***!
+  \***********************************************************************************/
+/*! exports provided: DefaultTextStyle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DefaultTextStyle", function() { return DefaultTextStyle; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+
+class DefaultTextStyle extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"] {
+    constructor() {
+        super();
+        this.fontFamily = "Palatino Linotype";
+        this.fontSize = 80;
+        this.fontStyle = "italic";
+        this.fontWeight = "bold";
+        this.fill = ["#E0E0E0"]; // gradient ['#ffffff'; '#00ff99']
+        this.stroke = "#4a1850";
+        this.strokeThickness = 5;
+        this.dropShadow = false;
+        this.dropShadowColor = "#000000";
+        this.dropShadowBlur = 4;
+        this.dropShadowAngle = Math.PI / 6;
+        this.dropShadowDistance = 6;
+        this.wordWrap = false;
+        this.wordWrapWidth = 440;
+        this.lineJoin = "round";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/MenuTextStyle.ts":
+/*!********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/MenuTextStyle.ts ***!
+  \********************************************************************************/
+/*! exports provided: MenuTextStyle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuTextStyle", function() { return MenuTextStyle; });
+/* harmony import */ var _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+
+class MenuTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
+    constructor() {
+        super();
+    }
+}
+
 
 /***/ }),
 

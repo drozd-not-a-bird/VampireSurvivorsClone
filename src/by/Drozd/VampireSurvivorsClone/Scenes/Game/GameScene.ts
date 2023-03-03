@@ -1,4 +1,4 @@
-import { Scene } from "../../../../../SceneManagment/Scene";
+import { Scene } from "../../SceneManagment/Scene";
 import { GamefieldView } from "./Components/Gamefield/GamefieldView";
 
 export class GameScene extends Scene {

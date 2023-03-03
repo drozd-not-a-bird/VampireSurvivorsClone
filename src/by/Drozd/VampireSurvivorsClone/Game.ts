@@ -1,15 +1,15 @@
-import { SceneManager } from "../../../SceneManagment/SceneManager";
+import { SceneManager } from "./SceneManagment/SceneManager";
 import { Container } from "pixi.js";
 import { GameScene } from "./Scenes/Game/GameScene";
 import { LevelConfig } from "./Scenes/Game/Configs/LevelConfig";
 import { GamefieldModel } from "./Scenes/Game/Components/Gamefield/GamefieldModel";
 import { GamefieldController } from "./Scenes/Game/Components/Gamefield/GamefieldController";
 import { GamefieldView } from "./Scenes/Game/Components/Gamefield/GamefieldView";
-import { MenuConfig } from "./Scenes/Menu/Configs/MenuConfig";
-import { MenuModel } from "./Scenes/Menu/components/Menu/MenuModel";
-import { MenuController } from "./Scenes/Menu/components/Menu/MenuController";
-import { MenuView } from "./Scenes/Menu/components/Menu/MenuView";
+import { MenuModel } from "./Scenes/Menu/Models/MenuModel";
+import { MenuController } from "./Scenes/Menu/Controllers/MenuController";
+import { MenuView } from "./Scenes/Menu/Views/MenuView";
 import { MenuScene } from "./Scenes/Menu/MenuScene";
+import { MenuViewModel } from "./Scenes/Menu/Resources/MenuViewModel";
 
 export class Game {
   private static sceneManager: SceneManager;
@@ -34,13 +34,10 @@ export class Game {
   }
 
   public static showMenuScene(): void {
-    const menuConfig = new MenuConfig();
-    const menuModel = new MenuModel(menuConfig);
+    const menuModel = new MenuModel();
     const menuController = new MenuController(menuModel);
-    const menuView = new MenuView(
-      menuModel,
-      menuController
-    );
+    const menuViewModel = new MenuViewModel();
+    const menuView = new MenuView(menuController, menuViewModel);
     this.sceneManager.show(new MenuScene(menuView));
   }
 }
