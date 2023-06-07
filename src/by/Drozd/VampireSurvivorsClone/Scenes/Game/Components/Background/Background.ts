@@ -1,14 +1,32 @@
 import { UIComponent } from "../../../../UI/UIComponents";
-import { BackgroundConfig } from "../../Configs/BackgroundConfig";
+import { BackgroundConfig } from "../../Configs/ViewConfigs/BackgroundConfig";
 
 export class Background extends UIComponent {
+  private static instance: Background;
   private backgroundConfig: BackgroundConfig;
-  constructor(backgroundConfig: BackgroundConfig) {
+  private fullWidth: number;
+  private fullHeight: number;
+
+    // coordinates of the sides
+    public leftSideX: number;
+    public rightSideX: number;
+    public upSideY: number;
+    public downSideY: number;
+
+  private constructor(backgroundConfig: BackgroundConfig) {
     super();
     this.backgroundConfig = backgroundConfig;
     this.generateBackgroundField();
-    console.log("Background was created!");
-    //this.addChild(backgroundConfig.textureForBackground);
+  }
+
+  public static getInstance(backgroundConfig?: BackgroundConfig): Background {
+    if (!Background.instance && backgroundConfig) {
+      Background.instance = new Background(backgroundConfig);
+    }
+    else if(!Background.instance && !backgroundConfig) {
+      throw new Error("There is not BackgroundConfig for Background instance");
+    }
+    return Background.instance;
   }
 
   private generateBackgroundField() {
@@ -19,7 +37,7 @@ export class Background extends UIComponent {
     let textureWidth = this.backgroundConfig.textureWidth;
     for (let i = 0; i < stepsInWidth; i++) {
       for (let j = 0; j < stepsInHeight; j++) {
-        let tile = PIXI.Sprite.from(this.backgroundConfig.textureForBackground);
+        let tile = new UIComponent(this.backgroundConfig.backgroundTileTexture);
         tile.scale.x = textureScale;
         tile.scale.y = textureScale;
         tile.x = i * textureWidth * textureScale;
@@ -27,5 +45,22 @@ export class Background extends UIComponent {
         this.addChild(tile);
       }
     }
+    this.fullWidth = textureWidth * textureScale * stepsInWidth;
+    this.fullHeight = textureHeight * textureScale * stepsInHeight;
+  }
+
+  public generateCoordinatesOfTheSides(): void {
+    this.leftSideX = -(this.fullWidth / 2);
+    this.rightSideX = +(this.fullWidth / 2);
+    this.upSideY = -(this.fullHeight / 2);
+    this.downSideY = +(this.fullHeight / 2);
+  }
+
+  public getWidth(): number {
+    return this.fullWidth;
+  }
+
+  public getHeight(): number {
+    return this.fullHeight;
   }
 }

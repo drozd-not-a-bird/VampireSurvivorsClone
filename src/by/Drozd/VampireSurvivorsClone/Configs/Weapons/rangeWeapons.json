@@ -1,0 +1,16 @@
+{
+  "rangeWeapons": {
+    "bow": {
+      "name": "bow",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    },
+    "crossbow": {
+      "name": "crossbow",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    }
+  }
+}

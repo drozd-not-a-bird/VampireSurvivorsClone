@@ -24,6 +24,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "mini-signals": "^2.0.0",
     "pixi.js": "^5.3.12"
   }
 }

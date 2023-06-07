@@ -1,10 +1,18 @@
+import { MiniSignal } from "mini-signals";
 import { Game } from "../../../Game";
-import { IMenuModel } from "./IMenuModel";
 
-export class MenuModel implements IMenuModel {
-  public constructor() {}
+export class MenuModel {
+  public PlayButtonPressed: MiniSignal;
 
-  public startGameScene(): void {
+  public constructor() {
+    this.PlayButtonPressed = new MiniSignal();
+  }
+
+  public ShowWeaponSelection(): void {
+    this.PlayButtonPressed.dispatch();
+  }
+
+  public StartGameScene(): void {
     Game.showGameScene();
   }
 }

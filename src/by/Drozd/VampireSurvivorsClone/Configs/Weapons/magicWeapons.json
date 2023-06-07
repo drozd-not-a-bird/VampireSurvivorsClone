@@ -1,0 +1,16 @@
+{
+  "magicWeapons": {
+    "fireball": {
+      "name": "fireball",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    },
+    "lightning": {
+      "name": "lightning",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    }
+  }
+}

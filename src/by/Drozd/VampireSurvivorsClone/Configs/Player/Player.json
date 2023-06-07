@@ -1,0 +1,14 @@
+{
+  "player": {
+    "x": 0,
+    "y": 0,
+    "width": 500,
+    "height": 500,
+    "animationSpeed": 0.2,
+    "health": 5,
+    "movementSpeed": 2,
+    "attackSpeed": 1,
+    "attackRange": 1,
+    "damage": 1
+  }
+}

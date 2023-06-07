@@ -1,0 +1,16 @@
+{
+  "meleeWeapons": {
+    "sword": {
+      "name": "sword",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    },
+    "spear": {
+      "name": "spear",
+      "damage": 5,
+      "attackSpeed": 3,
+      "attackRange": 5
+    }
+  }
+}

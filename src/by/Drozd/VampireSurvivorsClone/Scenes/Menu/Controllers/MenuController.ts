@@ -1,14 +1,17 @@
-import { IMenuModel } from "../Models/IMenuModel";
-import { IMenuController } from "./IMenuController";
+import { MenuModel } from "../Models/MenuModel";
 
-export class MenuController implements IMenuController {
-  private static menuModel: IMenuModel;
+export class MenuController {
+  private static menuModel: MenuModel;
 
-  public constructor(menuModel: IMenuModel) {
+  public constructor(menuModel: MenuModel) {
     MenuController.menuModel = menuModel;
   }
 
-  public GameStartButtonIsPressed(): void {
-    MenuController.menuModel.startGameScene();
+  public ButtonPlayIsPressed(): void {
+    MenuController.menuModel.ShowWeaponSelection();
+  }
+
+  public ButtonStartGameIsPressed(): void {
+    MenuController.menuModel.StartGameScene();
   }
 }

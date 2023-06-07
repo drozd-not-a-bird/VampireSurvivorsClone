@@ -37282,179 +37282,174 @@ function isMobile(param) {
 
 /***/ }),
 
-/***/ "./node_modules/mini-signals/lib/mini-signals.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/mini-signals/lib/mini-signals.js ***!
-  \*******************************************************/
+/***/ "./node_modules/mini-signals/dist/index.js":
+/*!*************************************************!*\
+  !*** ./node_modules/mini-signals/dist/index.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var MiniSignalBinding = (function () {
-  function MiniSignalBinding(fn, once, thisArg) {
-    if (once === undefined) once = false;
-
-    _classCallCheck(this, MiniSignalBinding);
-
-    this._fn = fn;
-    this._once = once;
-    this._thisArg = thisArg;
-    this._next = this._prev = this._owner = null;
-  }
-
-  _createClass(MiniSignalBinding, [{
-    key: 'detach',
-    value: function detach() {
-      if (this._owner === null) return false;
-      this._owner.detach(this);
-      return true;
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-  }]);
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(/*! ./mini-signals */ "./node_modules/mini-signals/dist/mini-signals.js"), exports);
 
-  return MiniSignalBinding;
-})();
 
-function _addMiniSignalBinding(self, node) {
-  if (!self._head) {
-    self._head = node;
-    self._tail = node;
-  } else {
-    self._tail._next = node;
-    node._prev = self._tail;
-    self._tail = node;
-  }
+/***/ }),
 
-  node._owner = self;
+/***/ "./node_modules/mini-signals/dist/mini-signals.js":
+/*!********************************************************!*\
+  !*** ./node_modules/mini-signals/dist/mini-signals.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-  return node;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MiniSignal = void 0;
+const MINI_SIGNAL_KEY = Symbol('SIGNAL');
+function isMiniSignalNodeRef(obj) {
+    return typeof obj === 'object' && MINI_SIGNAL_KEY in obj;
 }
-
-var MiniSignal = (function () {
-  function MiniSignal() {
-    _classCallCheck(this, MiniSignal);
-
-    this._head = this._tail = undefined;
-  }
-
-  _createClass(MiniSignal, [{
-    key: 'handlers',
-    value: function handlers() {
-      var exists = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-
-      var node = this._head;
-
-      if (exists) return !!node;
-
-      var ee = [];
-
-      while (node) {
-        ee.push(node);
-        node = node._next;
-      }
-
-      return ee;
+class MiniSignal {
+    constructor() {
+        /**
+         * A Symbol that is used to guarantee the uniqueness of the MiniSignal
+         * instance.
+         */
+        this._symbol = Symbol('MiniSignal');
+        this._refMap = new WeakMap();
+        this._head = undefined;
+        this._tail = undefined;
+        this._dispatching = false;
     }
-  }, {
-    key: 'has',
-    value: function has(node) {
-      if (!(node instanceof MiniSignalBinding)) {
-        throw new Error('MiniSignal#has(): First arg must be a MiniSignalBinding object.');
-      }
-
-      return node._owner === this;
+    hasListeners() {
+        return this._head != null;
     }
-  }, {
-    key: 'dispatch',
-    value: function dispatch() {
-      var node = this._head;
-
-      if (!node) return false;
-
-      while (node) {
-        if (node._once) this.detach(node);
-        node._fn.apply(node._thisArg, arguments);
-        node = node._next;
-      }
-
-      return true;
-    }
-  }, {
-    key: 'add',
-    value: function add(fn) {
-      var thisArg = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
-      if (typeof fn !== 'function') {
-        throw new Error('MiniSignal#add(): First arg must be a Function.');
-      }
-      return _addMiniSignalBinding(this, new MiniSignalBinding(fn, false, thisArg));
-    }
-  }, {
-    key: 'once',
-    value: function once(fn) {
-      var thisArg = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
-      if (typeof fn !== 'function') {
-        throw new Error('MiniSignal#once(): First arg must be a Function.');
-      }
-      return _addMiniSignalBinding(this, new MiniSignalBinding(fn, true, thisArg));
-    }
-  }, {
-    key: 'detach',
-    value: function detach(node) {
-      if (!(node instanceof MiniSignalBinding)) {
-        throw new Error('MiniSignal#detach(): First arg must be a MiniSignalBinding object.');
-      }
-      if (node._owner !== this) return this;
-
-      if (node._prev) node._prev._next = node._next;
-      if (node._next) node._next._prev = node._prev;
-
-      if (node === this._head) {
-        this._head = node._next;
-        if (node._next === null) {
-          this._tail = null;
+    /**
+     * Dispatches a signal to all registered listeners.
+     */
+    dispatch(...args) {
+        if (this._dispatching) {
+            throw new Error('MiniSignal#dispatch(): Signal already dispatching.');
         }
-      } else if (node === this._tail) {
-        this._tail = node._prev;
-        this._tail._next = null;
-      }
-
-      node._owner = null;
-      return this;
+        let node = this._head;
+        if (node == null)
+            return false;
+        this._dispatching = true;
+        while (node != null) {
+            node.fn(...args);
+            node = node.next;
+        }
+        this._dispatching = false;
+        return true;
     }
-  }, {
-    key: 'detachAll',
-    value: function detachAll() {
-      var node = this._head;
-      if (!node) return this;
-
-      this._head = this._tail = null;
-
-      while (node) {
-        node._owner = null;
-        node = node._next;
-      }
-      return this;
+    /**
+     * Register a new listener.
+     */
+    add(fn) {
+        if (typeof fn !== 'function') {
+            throw new Error('MiniSignal#add(): First arg must be a Function.');
+        }
+        return this._createRef(this._addNode({ fn }));
     }
-  }]);
-
-  return MiniSignal;
-})();
-
-MiniSignal.MiniSignalBinding = MiniSignalBinding;
-
-exports['default'] = MiniSignal;
-module.exports = exports['default'];
+    /**
+     * Remove binding object.
+     */
+    detach(sym) {
+        if (!isMiniSignalNodeRef(sym)) {
+            throw new Error('MiniSignal#detach(): First arg must be a MiniSignal listener reference.');
+        }
+        if (sym[MINI_SIGNAL_KEY] !== this._symbol) {
+            throw new Error('MiniSignal#detach(): MiniSignal listener does not belong to this MiniSignal.');
+        }
+        const node = this._refMap.get(sym);
+        if (!node)
+            return this; // already detached
+        this._refMap.delete(sym);
+        this._disconnectNode(node);
+        this._destroyNode(node);
+        return this;
+    }
+    /**
+     * Detach all listeners.
+     */
+    detachAll() {
+        let n = this._head;
+        if (n == null)
+            return this;
+        this._head = this._tail = undefined;
+        this._refMap = new WeakMap();
+        while (n != null) {
+            this._destroyNode(n);
+            n = n.next;
+        }
+        return this;
+    }
+    _destroyNode(node) {
+        node.fn = undefined;
+        node.prev = undefined;
+    }
+    _disconnectNode(node) {
+        if (node === this._head) {
+            // first node
+            this._head = node.next;
+            if (node.next == null) {
+                this._tail = undefined;
+            }
+        }
+        else if (node === this._tail) {
+            // last node
+            this._tail = node.prev;
+            if (this._tail != null) {
+                this._tail.next = undefined;
+            }
+        }
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        }
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        }
+    }
+    _addNode(node) {
+        if (this._head == null) {
+            this._head = node;
+            this._tail = node;
+        }
+        else {
+            // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
+            this._tail.next = node;
+            node.prev = this._tail;
+            this._tail = node;
+        }
+        return node;
+    }
+    _createRef(node) {
+        const sym = { [MINI_SIGNAL_KEY]: this._symbol };
+        this._refMap.set(sym, node);
+        return sym;
+    }
+    _getRef(sym) {
+        return this._refMap.get(sym);
+    }
+}
+exports.MiniSignal = MiniSignal;
 
 
 /***/ }),
@@ -40281,7 +40276,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "middleware", function() { return index; });
 /* harmony import */ var parse_uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! parse-uri */ "./node_modules/parse-uri/src/index.js");
 /* harmony import */ var parse_uri__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(parse_uri__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/lib/mini-signals.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mini-signals */ "./node_modules/resource-loader/node_modules/mini-signals/lib/mini-signals.js");
 /* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_1__);
 /*!
  * resource-loader - v3.0.1
@@ -42626,6 +42621,183 @@ Loader.use = function LoaderUseStatic(fn) {
 
 /***/ }),
 
+/***/ "./node_modules/resource-loader/node_modules/mini-signals/lib/mini-signals.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/resource-loader/node_modules/mini-signals/lib/mini-signals.js ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var MiniSignalBinding = (function () {
+  function MiniSignalBinding(fn, once, thisArg) {
+    if (once === undefined) once = false;
+
+    _classCallCheck(this, MiniSignalBinding);
+
+    this._fn = fn;
+    this._once = once;
+    this._thisArg = thisArg;
+    this._next = this._prev = this._owner = null;
+  }
+
+  _createClass(MiniSignalBinding, [{
+    key: 'detach',
+    value: function detach() {
+      if (this._owner === null) return false;
+      this._owner.detach(this);
+      return true;
+    }
+  }]);
+
+  return MiniSignalBinding;
+})();
+
+function _addMiniSignalBinding(self, node) {
+  if (!self._head) {
+    self._head = node;
+    self._tail = node;
+  } else {
+    self._tail._next = node;
+    node._prev = self._tail;
+    self._tail = node;
+  }
+
+  node._owner = self;
+
+  return node;
+}
+
+var MiniSignal = (function () {
+  function MiniSignal() {
+    _classCallCheck(this, MiniSignal);
+
+    this._head = this._tail = undefined;
+  }
+
+  _createClass(MiniSignal, [{
+    key: 'handlers',
+    value: function handlers() {
+      var exists = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+      var node = this._head;
+
+      if (exists) return !!node;
+
+      var ee = [];
+
+      while (node) {
+        ee.push(node);
+        node = node._next;
+      }
+
+      return ee;
+    }
+  }, {
+    key: 'has',
+    value: function has(node) {
+      if (!(node instanceof MiniSignalBinding)) {
+        throw new Error('MiniSignal#has(): First arg must be a MiniSignalBinding object.');
+      }
+
+      return node._owner === this;
+    }
+  }, {
+    key: 'dispatch',
+    value: function dispatch() {
+      var node = this._head;
+
+      if (!node) return false;
+
+      while (node) {
+        if (node._once) this.detach(node);
+        node._fn.apply(node._thisArg, arguments);
+        node = node._next;
+      }
+
+      return true;
+    }
+  }, {
+    key: 'add',
+    value: function add(fn) {
+      var thisArg = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+      if (typeof fn !== 'function') {
+        throw new Error('MiniSignal#add(): First arg must be a Function.');
+      }
+      return _addMiniSignalBinding(this, new MiniSignalBinding(fn, false, thisArg));
+    }
+  }, {
+    key: 'once',
+    value: function once(fn) {
+      var thisArg = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+      if (typeof fn !== 'function') {
+        throw new Error('MiniSignal#once(): First arg must be a Function.');
+      }
+      return _addMiniSignalBinding(this, new MiniSignalBinding(fn, true, thisArg));
+    }
+  }, {
+    key: 'detach',
+    value: function detach(node) {
+      if (!(node instanceof MiniSignalBinding)) {
+        throw new Error('MiniSignal#detach(): First arg must be a MiniSignalBinding object.');
+      }
+      if (node._owner !== this) return this;
+
+      if (node._prev) node._prev._next = node._next;
+      if (node._next) node._next._prev = node._prev;
+
+      if (node === this._head) {
+        this._head = node._next;
+        if (node._next === null) {
+          this._tail = null;
+        }
+      } else if (node === this._tail) {
+        this._tail = node._prev;
+        this._tail._next = null;
+      }
+
+      node._owner = null;
+      return this;
+    }
+  }, {
+    key: 'detachAll',
+    value: function detachAll() {
+      var node = this._head;
+      if (!node) return this;
+
+      this._head = this._tail = null;
+
+      while (node) {
+        node._owner = null;
+        node = node._next;
+      }
+      return this;
+    }
+  }]);
+
+  return MiniSignal;
+})();
+
+MiniSignal.MiniSignalBinding = MiniSignalBinding;
+
+exports['default'] = MiniSignal;
+module.exports = exports['default'];
+
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -43762,11 +43934,77 @@ class App extends PIXI.Application {
         game.start();
     }
 }
-App.width = 1080;
-App.height = 1920;
-App.resolution = 0.42;
+App.width = 1920;
+App.height = 1080;
+App.resolution = 1;
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json":
+/*!***********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json ***!
+  \***********************************************************************/
+/*! exports provided: enemys, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"enemys\":{\"wolf\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"bear\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"drowner\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghoul\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghost\":{\"health\":5,\"movementSpeed\":0.2,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"fiend\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":512,\"height\":512},\"leshy\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":512,\"height\":512}}}");
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json":
+/*!***********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json ***!
+  \***********************************************************************/
+/*! exports provided: player, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"player\":{\"x\":0,\"y\":0,\"width\":500,\"height\":500,\"animationSpeed\":0.2,\"health\":5,\"movementSpeed\":2,\"attackSpeed\":1,\"attackRange\":1,\"damage\":1}}");
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Spawn/spawnRules.json":
+/*!**************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Spawn/spawnRules.json ***!
+  \**************************************************************************/
+/*! exports provided: EnemysForEveryMinutes, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"EnemysForEveryMinutes\":[[\"leshy\",\"fiend\"],[\"leshy\",\"fiend\"],[\"leshy\",\"fiend\"],[\"leshy\",\"fiend\"],[\"leshy\",\"fiend\"],[\"leshy\",\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"],[\"fiend\"]]}");
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/magicWeapons.json":
+/*!******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/magicWeapons.json ***!
+  \******************************************************************************/
+/*! exports provided: magicWeapons, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"magicWeapons\":{\"fireball\":{\"name\":\"fireball\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5},\"lightning\":{\"name\":\"lightning\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5}}}");
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/meleeWeapons.json":
+/*!******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/meleeWeapons.json ***!
+  \******************************************************************************/
+/*! exports provided: meleeWeapons, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"meleeWeapons\":{\"sword\":{\"name\":\"sword\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5},\"spear\":{\"name\":\"spear\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5}}}");
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/rangeWeapons.json":
+/*!******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/rangeWeapons.json ***!
+  \******************************************************************************/
+/*! exports provided: rangeWeapons, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"rangeWeapons\":{\"bow\":{\"name\":\"bow\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5},\"crossbow\":{\"name\":\"crossbow\",\"damage\":5,\"attackSpeed\":3,\"attackRange\":5}}}");
 
 /***/ }),
 
@@ -43782,19 +44020,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
 /* harmony import */ var _SceneManagment_SceneManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SceneManagment/SceneManager */ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/SceneManager.ts");
 /* harmony import */ var _Scenes_Game_GameScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Scenes/Game/GameScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/GameScene.ts");
-/* harmony import */ var _Scenes_Game_Configs_LevelConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Scenes/Game/Configs/LevelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/LevelConfig.ts");
-/* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldModel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldModel.ts");
-/* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldController__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldController.ts");
-/* harmony import */ var _Scenes_Game_Components_Gamefield_GamefieldView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Scenes/Game/Components/Gamefield/GamefieldView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldView.ts");
-/* harmony import */ var _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Scenes/Menu/Models/MenuModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Models/MenuModel.ts");
-/* harmony import */ var _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Scenes/Menu/Controllers/MenuController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Controllers/MenuController.ts");
-/* harmony import */ var _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Scenes/Menu/Views/MenuView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Views/MenuView.ts");
-/* harmony import */ var _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Scenes/Menu/MenuScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/MenuScene.ts");
-/* harmony import */ var _Scenes_Menu_Resources_MenuViewModel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Scenes/Menu/Resources/MenuViewModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts");
-
-
-
-
+/* harmony import */ var _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Scenes/Menu/Models/MenuModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Models/MenuModel.ts");
+/* harmony import */ var _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Scenes/Menu/Controllers/MenuController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Controllers/MenuController.ts");
+/* harmony import */ var _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Scenes/Menu/Views/MenuView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Views/MenuView.ts");
+/* harmony import */ var _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Scenes/Menu/MenuScene */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/MenuScene.ts");
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
 
 
 
@@ -43807,23 +44037,123 @@ class Game {
         Game.sceneManager = new _SceneManagment_SceneManager__WEBPACK_IMPORTED_MODULE_0__["SceneManager"](root);
     }
     start() {
-        Game.showMenuScene();
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_6__["ResourceManager"].getInstance();
+        resourceManager.loadTextures()
+            .then(() => {
+            console.log("Textures loaded successfully");
+            Game.showMenuScene();
+        })
+            .catch((error) => {
+            console.error("Error loading textures:", error);
+        });
     }
     static showGameScene() {
-        const levelConfig = new _Scenes_Game_Configs_LevelConfig__WEBPACK_IMPORTED_MODULE_2__["LevelConfig"]();
-        const gamefieldModel = new _Scenes_Game_Components_Gamefield_GamefieldModel__WEBPACK_IMPORTED_MODULE_3__["GamefieldModel"](levelConfig);
-        const gamefieldController = new _Scenes_Game_Components_Gamefield_GamefieldController__WEBPACK_IMPORTED_MODULE_4__["GamefieldController"](gamefieldModel);
-        const gamefieldView = new _Scenes_Game_Components_Gamefield_GamefieldView__WEBPACK_IMPORTED_MODULE_5__["GamefieldView"](gamefieldModel, gamefieldController);
-        this.sceneManager.show(new _Scenes_Game_GameScene__WEBPACK_IMPORTED_MODULE_1__["GameScene"](gamefieldView));
+        this.sceneManager.show(new _Scenes_Game_GameScene__WEBPACK_IMPORTED_MODULE_1__["GameScene"]());
     }
     static showMenuScene() {
-        const menuModel = new _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_6__["MenuModel"]();
-        const menuController = new _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_7__["MenuController"](menuModel);
-        const menuViewModel = new _Scenes_Menu_Resources_MenuViewModel__WEBPACK_IMPORTED_MODULE_10__["MenuViewModel"]();
-        const menuView = new _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_8__["MenuView"](menuController, menuViewModel);
-        this.sceneManager.show(new _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_9__["MenuScene"](menuView));
+        const menuModel = new _Scenes_Menu_Models_MenuModel__WEBPACK_IMPORTED_MODULE_2__["MenuModel"]();
+        const menuController = new _Scenes_Menu_Controllers_MenuController__WEBPACK_IMPORTED_MODULE_3__["MenuController"](menuModel);
+        const menuView = new _Scenes_Menu_Views_MenuView__WEBPACK_IMPORTED_MODULE_4__["MenuView"](menuModel, menuController);
+        this.sceneManager.show(new _Scenes_Menu_MenuScene__WEBPACK_IMPORTED_MODULE_5__["MenuScene"](menuView));
     }
 }
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts":
+/*!*********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts ***!
+  \*********************************************************************************/
+/*! exports provided: ResourceManager */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResourceManager", function() { return ResourceManager; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _ResourcesURL__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ResourcesURL */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourcesURL.ts");
+
+
+class ResourceManager {
+    constructor() {
+        this.resources = {};
+    }
+    static getInstance() {
+        if (!ResourceManager.instance) {
+            ResourceManager.instance = new ResourceManager();
+        }
+        return ResourceManager.instance;
+    }
+    loadTextures() {
+        const loader = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["Loader"]();
+        const keys = Object.keys(_ResourcesURL__WEBPACK_IMPORTED_MODULE_1__["ResourcesURL"].resources);
+        keys.forEach((key) => {
+            loader.add(key, _ResourcesURL__WEBPACK_IMPORTED_MODULE_1__["ResourcesURL"].resources[key]);
+        });
+        return new Promise((resolve, reject) => {
+            loader.load((_, resources) => {
+                keys.forEach((key) => {
+                    this.resources[key] = resources[key];
+                });
+                resolve();
+            });
+            loader.onError.once((error) => {
+                reject(error);
+            });
+        });
+    }
+    getTexture(objectName) {
+        const resource = this.resources[objectName];
+        if (resource && resource.texture) {
+            return resource.texture;
+        }
+        throw new Error(`Texture '${objectName}' not found.`);
+    }
+    getSpritesheet(objectName) {
+        const resource = this.resources[objectName];
+        if (resource && resource.spritesheet) {
+            return resource.spritesheet;
+        }
+        throw new Error(`Spritesheet '${objectName}' not found.`);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourcesURL.ts":
+/*!******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourcesURL.ts ***!
+  \******************************************************************************/
+/*! exports provided: ResourcesURL */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResourcesURL", function() { return ResourcesURL; });
+class ResourcesURL {
+}
+ResourcesURL.resources = {
+    menuBackground: "./assets/Backgrounds/menuBackground.jpg",
+    gamefieldBackgroundTile: "assets/Backgrounds/Tiles/niceTile.png",
+    player: "assets/Player/player.json",
+    fiend: "assets/Enemies/fiend.json",
+    leshy: "assets/Enemies/leshy.json",
+    sword: "assets/Weapons/sword.json",
+    sword_ico: "assets/Weapons/sword_ico.png",
+    spear_ico: "assets/Weapons/spear_ico.png",
+    spear: "assets/Weapons/spear.json",
+    bow: "assets/Weapons/fireball.json",
+    bow_ico: "assets/Weapons/bow_ico.png",
+    crossbow: "assets/Weapons/fireball.json",
+    crossbow_ico: "assets/Weapons/crossbow_ico.png",
+    fireball: "assets/Weapons/fireball.json",
+    fireball_ico: "assets/Weapons/fireball_ico.png",
+    lightning: "assets/Weapons/lightning.json",
+    lightning_ico: "assets/Weapons/lightning_ico.png",
+    stopButton: "assets/UI/StopButton.png",
+};
 
 
 /***/ }),
@@ -43875,26 +44205,6 @@ class SceneManager {
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/AttackType/AttackType.ts":
-/*!********************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/AttackType/AttackType.ts ***!
-  \********************************************************************************************/
-/*! exports provided: AttackType */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttackType", function() { return AttackType; });
-var AttackType;
-(function (AttackType) {
-    AttackType[AttackType["weakSwordStrike"] = 0] = "weakSwordStrike";
-    AttackType[AttackType["normalSwordStrike"] = 1] = "normalSwordStrike";
-    AttackType[AttackType["strongSwordStrike"] = 2] = "strongSwordStrike";
-})(AttackType || (AttackType = {}));
-
-
-/***/ }),
-
 /***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts":
 /*!********************************************************************************************!*\
   !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts ***!
@@ -43904,7 +44214,7 @@ var AttackType;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Background", function() { return Background; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Background", function() { return Background; });
 /* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
 
 class Background extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
@@ -43912,8 +44222,15 @@ class Background extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UICompon
         super();
         this.backgroundConfig = backgroundConfig;
         this.generateBackgroundField();
-        console.log("Background was created!");
-        //this.addChild(backgroundConfig.textureForBackground);
+    }
+    static getInstance(backgroundConfig) {
+        if (!Background.instance && backgroundConfig) {
+            Background.instance = new Background(backgroundConfig);
+        }
+        else if (!Background.instance && !backgroundConfig) {
+            throw new Error("There is not BackgroundConfig for Background instance");
+        }
+        return Background.instance;
     }
     generateBackgroundField() {
         let stepsInWidth = this.backgroundConfig.stepsInWidth;
@@ -43923,7 +44240,7 @@ class Background extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UICompon
         let textureWidth = this.backgroundConfig.textureWidth;
         for (let i = 0; i < stepsInWidth; i++) {
             for (let j = 0; j < stepsInHeight; j++) {
-                let tile = PIXI.Sprite.from(this.backgroundConfig.textureForBackground);
+                let tile = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"](this.backgroundConfig.backgroundTileTexture);
                 tile.scale.x = textureScale;
                 tile.scale.y = textureScale;
                 tile.x = i * textureWidth * textureScale;
@@ -43931,6 +44248,258 @@ class Background extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UICompon
                 this.addChild(tile);
             }
         }
+        this.fullWidth = textureWidth * textureScale * stepsInWidth;
+        this.fullHeight = textureHeight * textureScale * stepsInHeight;
+    }
+    generateCoordinatesOfTheSides() {
+        this.leftSideX = -(this.fullWidth / 2);
+        this.rightSideX = +(this.fullWidth / 2);
+        this.upSideY = -(this.fullHeight / 2);
+        this.downSideY = +(this.fullHeight / 2);
+    }
+    getWidth() {
+        return this.fullWidth;
+    }
+    getHeight() {
+        return this.fullHeight;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/CollisionDetector/CollisionDetector.ts":
+/*!**********************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/CollisionDetector/CollisionDetector.ts ***!
+  \**********************************************************************************************************/
+/*! exports provided: CollisionDetector */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CollisionDetector", function() { return CollisionDetector; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Views_PlayerView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Views/PlayerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts");
+/* harmony import */ var _Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Enemy/EnemySpawner */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts");
+
+
+
+class CollisionDetector {
+    constructor() {
+        this.playerView = _Views_PlayerView__WEBPACK_IMPORTED_MODULE_1__["PlayerView"].getInstance();
+        this.enemiesView = [];
+        this.connectToEnemySpawner();
+        this.addTicker();
+    }
+    static getInstance() {
+        if (!CollisionDetector.instance) {
+            CollisionDetector.instance = new CollisionDetector();
+        }
+        return CollisionDetector.instance;
+    }
+    connectToEnemySpawner() {
+        const enemySpawner = _Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_2__["EnemySpawner"].getInstance();
+        enemySpawner.enemyWasCreated.add(this.addEnemy.bind(this));
+    }
+    addEnemy(enemy) {
+        this.enemiesView.push(enemy);
+    }
+    addTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.add(this.checkPlayerCollisionWithEnemies.bind(this));
+    }
+    checkPlayerCollisionWithEnemies() {
+        this.enemiesView.forEach((enemy) => {
+            if (this.checkCollision(this.playerView.getBounds(), enemy.getBounds())) {
+                console.log("player стукнулся");
+            }
+        });
+    }
+    checkCollision(player, enemy) {
+        return (player.x < enemy.x + enemy.width &&
+            player.x + player.width > enemy.x &&
+            player.y < enemy.y + enemy.height &&
+            player.y + player.height > enemy.y);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemyFactory.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemyFactory.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: EnemyFactory */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyFactory", function() { return EnemyFactory; });
+/* harmony import */ var _Controllers_EnemyController__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Controllers/EnemyController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/EnemyController.ts");
+/* harmony import */ var _Models_EnemyModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Models/EnemyModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/EnemyModel.ts");
+/* harmony import */ var _Views_EnemyView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Views/EnemyView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/EnemyView.ts");
+
+
+
+class EnemyFactory {
+    constructor(enemysModelsConfigs, enemysViewsConfigs) {
+        this.enemysModelsConfigs = enemysModelsConfigs;
+        this.enemysViewsConfigs = enemysViewsConfigs;
+    }
+    createEnemy(enemyName) {
+        const enemyModel = new _Models_EnemyModel__WEBPACK_IMPORTED_MODULE_1__["EnemyModel"](this.enemysModelsConfigs.getEnemyModelConfig(enemyName));
+        const enemyController = new _Controllers_EnemyController__WEBPACK_IMPORTED_MODULE_0__["EnemyController"](enemyModel);
+        const enemyView = new _Views_EnemyView__WEBPACK_IMPORTED_MODULE_2__["EnemyView"](enemyModel, enemyController, this.enemysViewsConfigs.getEnemyViewConfig(enemyName));
+        return enemyView;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: EnemySpawner */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemySpawner", function() { return EnemySpawner; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+/* harmony import */ var _Models_TimerModel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Models/TimerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts");
+/* harmony import */ var _EnemyFactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EnemyFactory */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemyFactory.ts");
+
+
+
+
+
+class EnemySpawner {
+    constructor(spawnConfig, enemysModelsConfigs, enemysViewsConfigs) {
+        this.enemySpawnConfig = spawnConfig;
+        this.timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_3__["TimerModel"].getInstance();
+        this.enemysContainer = new pixi_js__WEBPACK_IMPORTED_MODULE_1__["Container"]();
+        const gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_2__["Gamefield"].getInstance();
+        gamefield.addChild(this.enemysContainer);
+        this.enemyFactory = new _EnemyFactory__WEBPACK_IMPORTED_MODULE_4__["EnemyFactory"](enemysModelsConfigs, enemysViewsConfigs);
+        this.enemysNumber = 0;
+        this.enemyWasCreated = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+        this.connectToTimerModel();
+    }
+    static getInstance(spawnConfig, enemysModelsConfigs, enemysViewsConfigs) {
+        if (!EnemySpawner.instance &&
+            spawnConfig &&
+            enemysModelsConfigs &&
+            enemysViewsConfigs) {
+            EnemySpawner.instance = new EnemySpawner(spawnConfig, enemysModelsConfigs, enemysViewsConfigs);
+        }
+        else if (!EnemySpawner.instance) {
+            throw new Error("EnemySpawner instance has not been initialized");
+        }
+        return EnemySpawner.instance;
+    }
+    connectToTimerModel() {
+        this.timerModel.itsTimeForSpawn.add(this.spawn.bind(this));
+    }
+    spawn(minutes) {
+        if (this.enemysNumber < 5) {
+            const enemyName = this.getRandomString(this.enemySpawnConfig.enemysForSpawn[minutes]);
+            const enemyView = this.enemyFactory.createEnemy(enemyName);
+            this.enemysContainer.addChild(enemyView);
+            this.enemyWasCreated.dispatch(enemyView);
+            this.enemysNumber++;
+        }
+    }
+    getRandomString(strings) {
+        if (strings.length === 0) {
+            throw new Error("The array of strings is empty.");
+        }
+        const randomIndex = Math.floor(Math.random() * strings.length);
+        return strings[randomIndex];
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/GameStopButton/GameStopButton.ts":
+/*!****************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/GameStopButton/GameStopButton.ts ***!
+  \****************************************************************************************************/
+/*! exports provided: GameStopButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameStopButton", function() { return GameStopButton; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
+/* harmony import */ var _UI_Buttons_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UI/Buttons/Button */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/Button.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+/* harmony import */ var _Models_TimerModel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Models/TimerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts");
+
+
+
+
+
+
+class GameStopButton extends _UI_Buttons_Button__WEBPACK_IMPORTED_MODULE_3__["Button"] {
+    constructor() {
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_2__["ResourceManager"].getInstance();
+        super(resourceManager.getTexture("stopButton"));
+        this.isClicked = false;
+        this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_4__["Gamefield"].getInstance();
+        this.timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_5__["TimerModel"].getInstance();
+        this.createDarkOverlay();
+        this.createTicker();
+        this.on("click", this.clicked.bind(this));
+    }
+    clicked() {
+        if (!this.isClicked) {
+            this.isClicked = true;
+            this.stopGame();
+        }
+        else if (this.isClicked) {
+            this.isClicked = false;
+            this.continueGame();
+        }
+    }
+    continueGame() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.start();
+        this.timerModel.startTimer();
+        this.darkOverlay.visible = false;
+    }
+    stopGame() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.stop();
+        this.timerModel.stopTimer();
+        this.darkOverlay.visible = true;
+    }
+    createTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.add(this.holdButton.bind(this));
+    }
+    holdButton() {
+        this.x = this.gamefield.pivot.x + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2 - this.width;
+        this.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+        this.darkOverlay.x = this.gamefield.pivot.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+        this.darkOverlay.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+    }
+    createDarkOverlay() {
+        const darkOverlay = new PIXI.Graphics();
+        darkOverlay.beginFill(0x000000, 0.5); // Черный цвет с прозрачностью 0.5
+        darkOverlay.drawRect(0, 0, _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width, _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height); // Размеры спрайта равны размерам экрана
+        darkOverlay.endFill();
+        darkOverlay.visible = false;
+        this.darkOverlay = darkOverlay;
+        this.gamefield.addChild(darkOverlay);
     }
 }
 
@@ -43938,234 +44507,683 @@ class Background extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UICompon
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldController.ts":
-/*!****************************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldController.ts ***!
-  \****************************************************************************************************/
-/*! exports provided: GamefieldController */
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/KeyboardSystem/Keys.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/KeyboardSystem/Keys.ts ***!
+  \******************************************************************************************/
+/*! exports provided: Keys */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamefieldController", function() { return GamefieldController; });
-class GamefieldController {
-    constructor(gamefieldModel) {
-        this.gamefieldModel = gamefieldModel;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Keys", function() { return Keys; });
+/* harmony import */ var _Configs_ViewConfigs_KeysConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Configs/ViewConfigs/KeysConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/KeysConfig.ts");
+
+class Keys {
+    constructor() {
+        this.upValue = _Configs_ViewConfigs_KeysConfig__WEBPACK_IMPORTED_MODULE_0__["KeysConfig"].up;
+        this.downValue = _Configs_ViewConfigs_KeysConfig__WEBPACK_IMPORTED_MODULE_0__["KeysConfig"].down;
+        this.leftValue = _Configs_ViewConfigs_KeysConfig__WEBPACK_IMPORTED_MODULE_0__["KeysConfig"].left;
+        this.rightValue = _Configs_ViewConfigs_KeysConfig__WEBPACK_IMPORTED_MODULE_0__["KeysConfig"].right;
+        this.upIsPressed = false;
+        this.downIsPressed = false;
+        this.leftIsPressed = false;
+        this.rightIsPressed = false;
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldModel.ts":
-/*!***********************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldModel.ts ***!
-  \***********************************************************************************************/
-/*! exports provided: GamefieldModel */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamefieldModel", function() { return GamefieldModel; });
-/* harmony import */ var _Background_Background__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
-/* harmony import */ var _Player_PlayerController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Player/PlayerController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerController.ts");
-/* harmony import */ var _Player_PlayerModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Player/PlayerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerModel.ts");
-/* harmony import */ var _Player_PlayerView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Player/PlayerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerView.ts");
-
-
-
-
-class GamefieldModel {
-    constructor(levelConfig) {
-        //this.addAssets();
-        this.generateBackground(levelConfig);
-        this.generatePlayer(levelConfig);
-    }
-    generateBackground(levelConfig) {
-        this.background = new _Background_Background__WEBPACK_IMPORTED_MODULE_0__["Background"](levelConfig.backgroundConfig);
-    }
-    generatePlayer(levelConfig) {
-        let playerModel = new _Player_PlayerModel__WEBPACK_IMPORTED_MODULE_2__["PlayerModel"](levelConfig.playerConfig);
-        let playerController = new _Player_PlayerController__WEBPACK_IMPORTED_MODULE_1__["PlayerController"](playerModel);
-        this.playerView = new _Player_PlayerView__WEBPACK_IMPORTED_MODULE_3__["PlayerView"](playerModel, playerController);
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldView.ts":
-/*!**********************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Gamefield/GamefieldView.ts ***!
-  \**********************************************************************************************/
-/*! exports provided: GamefieldView */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamefieldView", function() { return GamefieldView; });
-/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
-
-class GamefieldView extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor(gamefieldModel, gamefieldController) {
-        super();
-        this.gamefieldModel = gamefieldModel;
-        this.gamefieldController = gamefieldController;
-        this.setBackground();
-        this.setPlayer();
-    }
-    setBackground() {
-        this.addChild(this.gamefieldModel.background);
-    }
-    setPlayer() {
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerController.ts":
-/*!**********************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerController.ts ***!
-  \**********************************************************************************************/
-/*! exports provided: PlayerController */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerController", function() { return PlayerController; });
-class PlayerController {
-    constructor(playerModel) {
-        this.playerModel = playerModel;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerModel.ts":
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MagicWeapon.ts":
 /*!*****************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerModel.ts ***!
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MagicWeapon.ts ***!
   \*****************************************************************************************/
-/*! exports provided: PlayerModel */
+/*! exports provided: MagicWeapon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerModel", function() { return PlayerModel; });
-class PlayerModel {
-    constructor(playerConfig) {
-        this.health = playerConfig.health;
-        this.movementSpeed = playerConfig.movementSpeed;
-        this.attackSpeed = playerConfig.attackSpeed;
-        this.attackRange = playerConfig.attackRange;
-        this.damage = playerConfig.damage;
-        this.attackType = playerConfig.attackType;
-        console.log("Player was created!");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MagicWeapon", function() { return MagicWeapon; });
+/* harmony import */ var _Weapon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/Weapon.ts");
+
+class MagicWeapon extends _Weapon__WEBPACK_IMPORTED_MODULE_0__["Weapon"] {
+    constructor(name, damage, attackSpeed, attackRange) {
+        super(name, damage, attackSpeed, attackRange);
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerView.ts":
-/*!****************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Player/PlayerView.ts ***!
-  \****************************************************************************************/
-/*! exports provided: PlayerView */
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MeleeWeapon.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MeleeWeapon.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: MeleeWeapon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerView", function() { return PlayerView; });
-/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeleeWeapon", function() { return MeleeWeapon; });
+/* harmony import */ var _Weapon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/Weapon.ts");
 
-class PlayerView extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor(playerModel, playerController) {
-        super();
-        this.playerModel = playerModel;
-        this.playerController = playerController;
-        this.addAnimations();
-    }
-    addAnimations() {
+class MeleeWeapon extends _Weapon__WEBPACK_IMPORTED_MODULE_0__["Weapon"] {
+    constructor(name, damage, attackSpeed, attackRange) {
+        super(name, damage, attackSpeed, attackRange);
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/BackgroundConfig.ts":
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/RangeWeapon.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/RangeWeapon.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: RangeWeapon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RangeWeapon", function() { return RangeWeapon; });
+/* harmony import */ var _Weapon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/Weapon.ts");
+
+class RangeWeapon extends _Weapon__WEBPACK_IMPORTED_MODULE_0__["Weapon"] {
+    constructor(name, damage, attackSpeed, attackRange) {
+        super(name, damage, attackSpeed, attackRange);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/SelectedWeapons.ts":
+/*!*********************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/SelectedWeapons.ts ***!
+  \*********************************************************************************************/
+/*! exports provided: SelectedWeapons */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectedWeapons", function() { return SelectedWeapons; });
+class SelectedWeapons {
+    constructor() { }
+    static getInstance() {
+        if (!SelectedWeapons.instance) {
+            SelectedWeapons.instance = new SelectedWeapons();
+        }
+        return SelectedWeapons.instance;
+    }
+    setMeleeWeapon(meleeWeapon) {
+        this.meleeWeapon = meleeWeapon;
+    }
+    getMeleeWeapon() {
+        return this.meleeWeapon;
+    }
+    setRangeWeapon(rangeWeapon) {
+        this.rangeWeapon = rangeWeapon;
+    }
+    getRangeWeapon() {
+        return this.rangeWeapon;
+    }
+    setMagicWeapon(magicWeapon) {
+        this.magicWeapon = magicWeapon;
+    }
+    getMagicWeapon() {
+        return this.magicWeapon;
+    }
+    logSelectedWeapons() {
+        console.log(this.meleeWeapon);
+        console.log(this.rangeWeapon);
+        console.log(this.magicWeapon);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/Weapon.ts":
 /*!************************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/BackgroundConfig.ts ***!
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/Weapon.ts ***!
   \************************************************************************************/
+/*! exports provided: Weapon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Weapon", function() { return Weapon; });
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
+
+class Weapon {
+    constructor(name, damage, attackSpeed, attackRange) {
+        this.level = 1;
+        this.name = name;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__["ResourceManager"].getInstance();
+        this.icon = resourceManager.getTexture(name + "_ico");
+        this.attackAnimation = resourceManager.getSpritesheet(name).animations.attack;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemyModelConfig.ts":
+/*!*************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemyModelConfig.ts ***!
+  \*************************************************************************************************/
+/*! exports provided: EnemyModelConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyModelConfig", function() { return EnemyModelConfig; });
+class EnemyModelConfig {
+    constructor(name, health, movementSpeed, attackSpeed, attackRange, damage) {
+        this.name = name;
+        this.health = health;
+        this.movementSpeed = movementSpeed;
+        this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
+        this.damage = damage;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemySpawnConfig.ts":
+/*!*************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemySpawnConfig.ts ***!
+  \*************************************************************************************************/
+/*! exports provided: EnemySpawnConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemySpawnConfig", function() { return EnemySpawnConfig; });
+/* harmony import */ var _Configs_Spawn_spawnRules_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Configs/Spawn/spawnRules.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Spawn/spawnRules.json");
+var _Configs_Spawn_spawnRules_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Spawn/spawnRules.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Spawn/spawnRules.json", 1);
+
+class EnemySpawnConfig {
+    constructor() {
+        this.enemysForSpawn = [];
+        this.initEnemysForSpawn();
+    }
+    initEnemysForSpawn() {
+        for (let i = 0; i < _Configs_Spawn_spawnRules_json__WEBPACK_IMPORTED_MODULE_0__["EnemysForEveryMinutes"].length; i++) {
+            for (let j = 0; j < _Configs_Spawn_spawnRules_json__WEBPACK_IMPORTED_MODULE_0__["EnemysForEveryMinutes"][i].length; j++) {
+                this.enemysForSpawn.push(_Configs_Spawn_spawnRules_json__WEBPACK_IMPORTED_MODULE_0__["EnemysForEveryMinutes"][i]);
+            }
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemysModelsConfigs.ts":
+/*!****************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemysModelsConfigs.ts ***!
+  \****************************************************************************************************/
+/*! exports provided: EnemysModelsConfigs */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemysModelsConfigs", function() { return EnemysModelsConfigs; });
+/* harmony import */ var _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Configs/Enemys/enemys.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json");
+var _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Enemys/enemys.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json", 1);
+/* harmony import */ var _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EnemyModelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemyModelConfig.ts");
+
+
+class EnemysModelsConfigs {
+    constructor() {
+        this.enemysModelsConfigs = {};
+        this.initEnemysModelConfigs();
+    }
+    initEnemysModelConfigs() {
+        this.enemysModelsConfigs["wolf"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("wolf", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].wolf.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].wolf.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].wolf.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].wolf.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].wolf.damage);
+        this.enemysModelsConfigs["bear"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("bear", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].bear.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].bear.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].bear.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].bear.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].bear.damage);
+        this.enemysModelsConfigs["drowner"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("drowner", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].drowner.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].drowner.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].drowner.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].drowner.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].drowner.damage);
+        this.enemysModelsConfigs["ghoul"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("ghoul", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghoul.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghoul.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghoul.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghoul.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghoul.damage);
+        this.enemysModelsConfigs["ghost"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("ghost", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghost.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghost.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghost.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghost.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].ghost.damage);
+        this.enemysModelsConfigs["fiend"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("fiend", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.damage);
+        this.enemysModelsConfigs["leshy"] = new _EnemyModelConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyModelConfig"]("leshy", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.health, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.movementSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.attackSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.attackRange, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.damage);
+    }
+    getEnemyModelConfig(enemyName) {
+        const config = this.enemysModelsConfigs[enemyName];
+        if (config) {
+            return config;
+        }
+        throw new Error(`Model config for ${enemyName} does not exist.`);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/GamefieldModelConfig.ts":
+/*!*****************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/GamefieldModelConfig.ts ***!
+  \*****************************************************************************************************/
+/*! exports provided: GamefieldModelConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamefieldModelConfig", function() { return GamefieldModelConfig; });
+/* harmony import */ var _EnemysModelsConfigs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EnemysModelsConfigs */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemysModelsConfigs.ts");
+/* harmony import */ var _PlayerModelConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayerModelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/PlayerModelConfig.ts");
+/* harmony import */ var _EnemySpawnConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EnemySpawnConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/EnemySpawnConfig.ts");
+
+
+
+class GamefieldModelConfig {
+    constructor() {
+        this.playerModelConfig = new _PlayerModelConfig__WEBPACK_IMPORTED_MODULE_1__["PlayerModelConfig"]();
+        this.enemysModelsConfigs = new _EnemysModelsConfigs__WEBPACK_IMPORTED_MODULE_0__["EnemysModelsConfigs"]();
+        this.enemySpawnConfig = new _EnemySpawnConfig__WEBPACK_IMPORTED_MODULE_2__["EnemySpawnConfig"]();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/PlayerModelConfig.ts":
+/*!**************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/PlayerModelConfig.ts ***!
+  \**************************************************************************************************/
+/*! exports provided: PlayerModelConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerModelConfig", function() { return PlayerModelConfig; });
+/* harmony import */ var _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Configs/Player/Player.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json");
+var _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Player/Player.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json", 1);
+
+class PlayerModelConfig {
+    constructor() {
+        this.x = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].x;
+        this.y = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].y;
+        this.width = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].width;
+        this.height = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].height;
+        this.health = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].health;
+        this.movementSpeed = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].movementSpeed;
+        this.attackSpeed = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].attackSpeed;
+        this.attackRange = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].attackRange;
+        this.damage = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].damage;
+        //this.weapon = new Weapon()
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/BackgroundConfig.ts":
+/*!************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/BackgroundConfig.ts ***!
+  \************************************************************************************************/
 /*! exports provided: BackgroundConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BackgroundConfig", function() { return BackgroundConfig; });
-/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
 
 class BackgroundConfig {
     constructor() {
-        this.textureForBackground = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Texture"].from("./assets/Backgrounds/Tiles/tile6.png");
-        this.stepsInWidth = 15;
-        this.stepsInHeight = 20;
-        this.textureScale = 4;
-        this.textureWidth = 64;
-        this.textureHeight = 64;
+        this.stepsInWidth = 10;
+        this.stepsInHeight = 10;
+        this.textureScale = 2;
+        this.textureWidth = 256;
+        this.textureHeight = 256;
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__["ResourceManager"].getInstance();
+        this.backgroundTileTexture = resourceManager.getTexture("gamefieldBackgroundTile");
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/LevelConfig.ts":
-/*!*******************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/LevelConfig.ts ***!
-  \*******************************************************************************/
-/*! exports provided: LevelConfig */
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemyViewConfig.ts":
+/*!***********************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemyViewConfig.ts ***!
+  \***********************************************************************************************/
+/*! exports provided: EnemyViewConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LevelConfig", function() { return LevelConfig; });
-/* harmony import */ var _BackgroundConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BackgroundConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/BackgroundConfig.ts");
-/* harmony import */ var _PlayerConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayerConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/PlayerConfig.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyViewConfig", function() { return EnemyViewConfig; });
+class EnemyViewConfig {
+    constructor(name, animationSpeed, width, height, enemySpriteSheet) {
+        this.name = name;
+        this.animationSpeed = animationSpeed;
+        this.width = width;
+        this.height = height;
+        this.enemySpriteSheet = enemySpriteSheet;
+    }
+}
 
 
-class LevelConfig {
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemysViewsConfigs.ts":
+/*!**************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemysViewsConfigs.ts ***!
+  \**************************************************************************************************/
+/*! exports provided: EnemysViewsConfigs */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemysViewsConfigs", function() { return EnemysViewsConfigs; });
+/* harmony import */ var _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Configs/Enemys/enemys.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json");
+var _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Enemys/enemys.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json", 1);
+/* harmony import */ var _EnemyViewConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EnemyViewConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemyViewConfig.ts");
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
+
+
+
+class EnemysViewsConfigs {
+    constructor() {
+        this.enemysViewsConfigs = {};
+        this.initEnemysViewsConfigs();
+    }
+    ;
+    initEnemysViewsConfigs() {
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_2__["ResourceManager"].getInstance();
+        this.enemysViewsConfigs["fiend"] = new _EnemyViewConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyViewConfig"]("fiend", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.animationSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.width, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].fiend.height, resourceManager.getSpritesheet("fiend"));
+        this.enemysViewsConfigs["leshy"] = new _EnemyViewConfig__WEBPACK_IMPORTED_MODULE_1__["EnemyViewConfig"]("leshy", _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.animationSpeed, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.width, _Configs_Enemys_enemys_json__WEBPACK_IMPORTED_MODULE_0__["enemys"].leshy.height, resourceManager.getSpritesheet("leshy"));
+    }
+    getEnemyViewConfig(enemyName) {
+        const config = this.enemysViewsConfigs[enemyName];
+        if (config) {
+            return config;
+        }
+        throw new Error(`View config for ${enemyName} does not exist.`);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/GamefieldViewConfig.ts":
+/*!***************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/GamefieldViewConfig.ts ***!
+  \***************************************************************************************************/
+/*! exports provided: GamefieldViewConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamefieldViewConfig", function() { return GamefieldViewConfig; });
+/* harmony import */ var _BackgroundConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BackgroundConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/BackgroundConfig.ts");
+/* harmony import */ var _EnemysViewsConfigs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EnemysViewsConfigs */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/EnemysViewsConfigs.ts");
+/* harmony import */ var _PlayerViewConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlayerViewConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/PlayerViewConfig.ts");
+
+
+
+class GamefieldViewConfig {
     constructor() {
         this.backgroundConfig = new _BackgroundConfig__WEBPACK_IMPORTED_MODULE_0__["BackgroundConfig"]();
-        this.playerConfig = new _PlayerConfig__WEBPACK_IMPORTED_MODULE_1__["PlayerConfig"]();
+        this.playerViewConfig = new _PlayerViewConfig__WEBPACK_IMPORTED_MODULE_2__["PlayerViewConfig"]();
+        this.enemysViewsConfigs = new _EnemysViewsConfigs__WEBPACK_IMPORTED_MODULE_1__["EnemysViewsConfigs"]();
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/PlayerConfig.ts":
-/*!********************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/PlayerConfig.ts ***!
-  \********************************************************************************/
-/*! exports provided: PlayerConfig */
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/KeysConfig.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/KeysConfig.ts ***!
+  \******************************************************************************************/
+/*! exports provided: KeysConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerConfig", function() { return PlayerConfig; });
-/* harmony import */ var _Components_AttackType_AttackType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Components/AttackType/AttackType */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/AttackType/AttackType.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeysConfig", function() { return KeysConfig; });
+var KeysConfig;
+(function (KeysConfig) {
+    KeysConfig["up"] = "KeyW";
+    KeysConfig["down"] = "KeyS";
+    KeysConfig["left"] = "KeyA";
+    KeysConfig["right"] = "KeyD";
+})(KeysConfig || (KeysConfig = {}));
 
-class PlayerConfig {
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/PlayerViewConfig.ts":
+/*!************************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/PlayerViewConfig.ts ***!
+  \************************************************************************************************/
+/*! exports provided: PlayerViewConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerViewConfig", function() { return PlayerViewConfig; });
+/* harmony import */ var _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../Configs/Player/Player.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json");
+var _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Player/Player.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Player/Player.json", 1);
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
+
+
+class PlayerViewConfig {
     constructor() {
-        this.health = 50;
-        this.movementSpeed = 20;
-        this.attackSpeed = 1;
-        this.attackRange = 1;
-        this.damage = 1;
-        this.attackType = _Components_AttackType_AttackType__WEBPACK_IMPORTED_MODULE_0__["AttackType"].weakSwordStrike;
-        //const spritesheet = new PIXI.Spritesheet(PIXI.BaseTexture.from("assets/Player/playerStaying.json").);
-        //this.playerAnimationStaying = PIXI.AnimatedSprite.from("assets/Player/playerStaying.json")
+        this.animationSpeed = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].animationSpeed;
+        this.width = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].width;
+        this.height = _Configs_Player_Player_json__WEBPACK_IMPORTED_MODULE_0__["player"].height;
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_1__["ResourceManager"].getInstance();
+        this.playerSpriteSheet = resourceManager.getSpritesheet("player");
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/WeaponsConfig.ts":
+/*!*********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/WeaponsConfig.ts ***!
+  \*********************************************************************************/
+/*! exports provided: WeaponsConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponsConfig", function() { return WeaponsConfig; });
+/* harmony import */ var _Components_Weapon_MagicWeapon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Components/Weapon/MagicWeapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MagicWeapon.ts");
+/* harmony import */ var _Components_Weapon_MeleeWeapon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Components/Weapon/MeleeWeapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/MeleeWeapon.ts");
+/* harmony import */ var _Components_Weapon_RangeWeapon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/Weapon/RangeWeapon */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/RangeWeapon.ts");
+/* harmony import */ var _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Configs/Weapons/meleeWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/meleeWeapons.json");
+var _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../Configs/Weapons/meleeWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/meleeWeapons.json", 1);
+/* harmony import */ var _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Configs/Weapons/rangeWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/rangeWeapons.json");
+var _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../Configs/Weapons/rangeWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/rangeWeapons.json", 1);
+/* harmony import */ var _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Configs/Weapons/magicWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/magicWeapons.json");
+var _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../Configs/Weapons/magicWeapons.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Weapons/magicWeapons.json", 1);
+
+
+
+
+
+
+class WeaponsConfig {
+    constructor() {
+        this.meleeWeapons = [];
+        this.rangeWeapons = [];
+        this.magicWeapons = [];
+        this.setMeleeWeapons();
+        this.setRangeWeapons();
+        this.setMagicWeapons();
+    }
+    setMeleeWeapons() {
+        this.meleeWeapons.push(new _Components_Weapon_MeleeWeapon__WEBPACK_IMPORTED_MODULE_1__["MeleeWeapon"](_Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].sword.name, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].sword.damage, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].sword.attackSpeed, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].sword.attackRange));
+        this.meleeWeapons.push(new _Components_Weapon_MeleeWeapon__WEBPACK_IMPORTED_MODULE_1__["MeleeWeapon"](_Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].spear.name, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].spear.damage, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].spear.attackSpeed, _Configs_Weapons_meleeWeapons_json__WEBPACK_IMPORTED_MODULE_3__["meleeWeapons"].spear.attackRange));
+    }
+    setRangeWeapons() {
+        this.rangeWeapons.push(new _Components_Weapon_RangeWeapon__WEBPACK_IMPORTED_MODULE_2__["RangeWeapon"](_Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].bow.name, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].bow.damage, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].bow.attackSpeed, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].bow.attackRange));
+        this.rangeWeapons.push(new _Components_Weapon_RangeWeapon__WEBPACK_IMPORTED_MODULE_2__["RangeWeapon"](_Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].crossbow.name, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].crossbow.damage, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].crossbow.attackSpeed, _Configs_Weapons_rangeWeapons_json__WEBPACK_IMPORTED_MODULE_4__["rangeWeapons"].crossbow.attackRange));
+    }
+    setMagicWeapons() {
+        this.magicWeapons.push(new _Components_Weapon_MagicWeapon__WEBPACK_IMPORTED_MODULE_0__["MagicWeapon"](_Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].fireball.name, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].fireball.damage, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].fireball.attackSpeed, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].fireball.attackRange));
+        this.magicWeapons.push(new _Components_Weapon_MagicWeapon__WEBPACK_IMPORTED_MODULE_0__["MagicWeapon"](_Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].lightning.name, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].lightning.damage, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].lightning.attackSpeed, _Configs_Weapons_magicWeapons_json__WEBPACK_IMPORTED_MODULE_5__["magicWeapons"].lightning.attackRange));
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/EnemyController.ts":
+/*!***************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/EnemyController.ts ***!
+  \***************************************************************************************/
+/*! exports provided: EnemyController */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyController", function() { return EnemyController; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+
+class EnemyController {
+    constructor(enemyModel) {
+        this.enemyModel = enemyModel;
+        this.addTicker();
+    }
+    addTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        const enemyMoveFunc = this.enemyMove.bind(this);
+        ticker.add(enemyMoveFunc);
+    }
+    enemyMove() {
+        this.enemyModel.move();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts":
+/*!*******************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts ***!
+  \*******************************************************************************************/
+/*! exports provided: HealthBarController */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HealthBarController", function() { return HealthBarController; });
+class HealthBarController {
+    constructor(healthBarModel) {
+        this.healthBarModel = healthBarModel;
+    }
+    static getInstance(healthBarModel) {
+        if (!HealthBarController.instance && healthBarModel) {
+            HealthBarController.instance = new HealthBarController(healthBarModel);
+        }
+        else if (!HealthBarController.instance && !healthBarModel) {
+            throw new Error("There is not healthBarModel for HealthBarController instance");
+        }
+        return HealthBarController.instance;
+    }
+    setHealth(health) {
+        this.healthBarModel.setHealth(health);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/PlayerController.ts":
+/*!****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/PlayerController.ts ***!
+  \****************************************************************************************/
+/*! exports provided: PlayerController */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerController", function() { return PlayerController; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Components_KeyboardSystem_Keys__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Components/KeyboardSystem/Keys */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/KeyboardSystem/Keys.ts");
+
+
+class PlayerController {
+    constructor(playerModel) {
+        this.playerModel = playerModel;
+        this.keys = new _Components_KeyboardSystem_Keys__WEBPACK_IMPORTED_MODULE_1__["Keys"]();
+        this.addEventsForMovement();
+        this.addTicker();
+    }
+    addEventsForMovement() {
+        const keydownFunc = this.keydown.bind(this);
+        const keyupFunc = this.keyUp.bind(this);
+        document.addEventListener("keydown", keydownFunc);
+        document.addEventListener("keyup", keyupFunc);
+    }
+    keydown(event) {
+        if (event.code == this.keys.upValue) {
+            this.keys.upIsPressed = true;
+        }
+        else if (event.code == this.keys.downValue) {
+            this.keys.downIsPressed = true;
+        }
+        else if (event.code == this.keys.leftValue) {
+            this.keys.leftIsPressed = true;
+        }
+        else if (event.code == this.keys.rightValue) {
+            this.keys.rightIsPressed = true;
+        }
+    }
+    keyUp(event) {
+        if (event.code == this.keys.upValue) {
+            this.keys.upIsPressed = false;
+        }
+        else if (event.code == this.keys.downValue) {
+            this.keys.downIsPressed = false;
+        }
+        else if (event.code == this.keys.leftValue) {
+            this.keys.leftIsPressed = false;
+        }
+        else if (event.code == this.keys.rightValue) {
+            this.keys.rightIsPressed = false;
+        }
+    }
+    addTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        const playerMoveFunc = this.playerMove.bind(this);
+        ticker.add(playerMoveFunc);
+    }
+    playerMove() {
+        this.playerModel.move(this.keys);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/WeaponsController.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/WeaponsController.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: WeaponsController */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponsController", function() { return WeaponsController; });
+class WeaponsController {
+    constructor(weaponsModel) {
+        this.weaponsModel = weaponsModel;
     }
 }
 
@@ -44183,14 +45201,1224 @@ class PlayerConfig {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameScene", function() { return GameScene; });
 /* harmony import */ var _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SceneManagment/Scene */ "./src/by/Drozd/VampireSurvivorsClone/SceneManagment/Scene.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+
 
 class GameScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scene"] {
-    constructor(gamefieldView) {
+    constructor() {
         super();
-        this.addChild(gamefieldView);
+        this.addGamefield();
+    }
+    addGamefield() {
+        const gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_1__["Gamefield"].getInstance();
+        this.addChild(gamefield);
+        gamefield.startGame();
     }
 }
 
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts":
+/*!*********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts ***!
+  \*********************************************************************/
+/*! exports provided: Gamefield */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Gamefield", function() { return Gamefield; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _Components_Background_Background__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Components/Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
+/* harmony import */ var _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/CollisionDetector/CollisionDetector */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/CollisionDetector/CollisionDetector.ts");
+/* harmony import */ var _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/Enemy/EnemySpawner */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts");
+/* harmony import */ var _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Components/GameStopButton/GameStopButton */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/GameStopButton/GameStopButton.ts");
+/* harmony import */ var _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Configs/ModelConfigs/GamefieldModelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/GamefieldModelConfig.ts");
+/* harmony import */ var _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Configs/ViewConfigs/GamefieldViewConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/GamefieldViewConfig.ts");
+/* harmony import */ var _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Controllers/HealthBarController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts");
+/* harmony import */ var _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Controllers/PlayerController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/PlayerController.ts");
+/* harmony import */ var _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Controllers/WeaponsController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/WeaponsController.ts");
+/* harmony import */ var _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Models/HealthBarModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/HealthBarModel.ts");
+/* harmony import */ var _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Models/PlayerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts");
+/* harmony import */ var _Models_TimerModel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Models/TimerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts");
+/* harmony import */ var _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Models/WeaponsModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/WeaponsModel.ts");
+/* harmony import */ var _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Views/HealthBarView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/HealthBarView.ts");
+/* harmony import */ var _Views_PlayerView__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Views/PlayerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts");
+/* harmony import */ var _Views_TimerView__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Views/TimerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/TimerView.ts");
+/* harmony import */ var _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Views/WeaponsView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/WeaponsView.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Gamefield extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Container"] {
+    constructor() {
+        super();
+        this.setTransforms();
+        this.addConfigs();
+    }
+    startGame() {
+        this.generateBackground();
+        this.generateEnemys();
+        this.generateHealthBar();
+        this.generatePlayer();
+        this.generateWeapons();
+        this.generateTimer();
+        this.generateCollisionDetector();
+        this.generateStopButton();
+    }
+    static getInstance() {
+        if (!Gamefield.instance) {
+            Gamefield.instance = new Gamefield();
+        }
+        return Gamefield.instance;
+    }
+    setTransforms() {
+        this.x = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+        this.y = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+    }
+    addConfigs() {
+        this.modelConfig = new _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_6__["GamefieldModelConfig"]();
+        this.viewConfig = new _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_7__["GamefieldViewConfig"]();
+    }
+    generateBackground() {
+        const background = _Components_Background_Background__WEBPACK_IMPORTED_MODULE_2__["Background"].getInstance(this.viewConfig.backgroundConfig);
+        background.x -= background.getWidth() / 2;
+        background.y -= background.getHeight() / 2;
+        background.generateCoordinatesOfTheSides();
+        this.addChild(background);
+    }
+    generatePlayer() {
+        const playerModel = _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_12__["PlayerModel"].getInstance(this.modelConfig.playerModelConfig);
+        const playerController = new _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_9__["PlayerController"](playerModel);
+        const playerView = _Views_PlayerView__WEBPACK_IMPORTED_MODULE_16__["PlayerView"].getInstance(playerModel, this.viewConfig.playerViewConfig);
+        this.addChild(playerView);
+    }
+    generateWeapons() {
+        const weaponsModel = new _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_14__["WeaponsModel"]();
+        const weaponsController = new _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_10__["WeaponsController"](weaponsModel);
+        const weaponsView = new _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_18__["WeaponsView"](weaponsModel, weaponsController);
+        this.addChild(weaponsView);
+    }
+    generateTimer() {
+        const timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_13__["TimerModel"].getInstance();
+        timerModel.startTimer();
+        const timerView = new _Views_TimerView__WEBPACK_IMPORTED_MODULE_17__["TimerView"](timerModel);
+        this.addChild(timerView);
+    }
+    generateEnemys() {
+        const enemySpawner = _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_4__["EnemySpawner"].getInstance(this.modelConfig.enemySpawnConfig, this.modelConfig.enemysModelsConfigs, this.viewConfig.enemysViewsConfigs);
+    }
+    generateHealthBar() {
+        const healthBarModel = new _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_11__["HealthBarModel"](this.modelConfig.playerModelConfig.health);
+        const healthBarController = _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_8__["HealthBarController"].getInstance(healthBarModel);
+        const healthBarView = new _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_15__["HealthBarView"](healthBarModel, healthBarController);
+        this.addChild(healthBarView);
+    }
+    generateCollisionDetector() {
+        const collisionDetector = _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_3__["CollisionDetector"].getInstance();
+    }
+    generateStopButton() {
+        const gameStopButton = new _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_5__["GameStopButton"]();
+        this.addChild(gameStopButton);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/EnemyModel.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/EnemyModel.ts ***!
+  \*****************************************************************************/
+/*! exports provided: EnemyModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyModel", function() { return EnemyModel; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _PlayerModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlayerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts");
+
+
+
+class EnemyModel {
+    constructor(enemyModelConfig) {
+        this.playerModel = _PlayerModel__WEBPACK_IMPORTED_MODULE_2__["PlayerModel"].getInstance();
+        this.generateSpawnPosition();
+        this.health = enemyModelConfig.health;
+        this.movementSpeed = enemyModelConfig.movementSpeed;
+        this.attackSpeed = enemyModelConfig.attackSpeed;
+        this.attackRange = enemyModelConfig.attackRange;
+        this.damage = enemyModelConfig.damage;
+        this.isMoving = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    generateSpawnPosition() {
+        // random number from 1 to 4
+        const side = Math.floor(Math.random() * 4) + 1;
+        switch (side) {
+            //up side
+            case 1: {
+                this._x =
+                    Math.floor(Math.random() * (this.playerModel.x + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2)) +
+                        (this.playerModel.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2);
+                this._y = this.playerModel.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+                break;
+            }
+            //right side
+            case 2: {
+                this._x = this.playerModel.x + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+                this._y =
+                    Math.floor(Math.random() * (this.playerModel.y + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2)) +
+                        (this.playerModel.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2);
+                break;
+            }
+            //down side
+            case 3: {
+                this._x =
+                    Math.floor(Math.random() * (this.playerModel.x + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2)) +
+                        (this.playerModel.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2);
+                this._y = this.playerModel.y + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+                break;
+            }
+            //left side
+            case 4: {
+                this._x = this.playerModel.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+                this._y =
+                    Math.floor(Math.random() * (this.playerModel.y + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2)) +
+                        (this.playerModel.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2);
+                break;
+            }
+        }
+    }
+    move() {
+        // Calculate direction towards the player
+        const playerX = this.playerModel.x;
+        const playerY = this.playerModel.y;
+        const directionX = playerX - this._x;
+        const directionY = playerY - this._y;
+        // Normalize the direction vector
+        const length = Math.sqrt(directionX * directionX + directionY * directionY);
+        const normalizedDirectionX = directionX / length;
+        const normalizedDirectionY = directionY / length;
+        // Move towards the player based on the movement speed
+        this._x += normalizedDirectionX * this.movementSpeed;
+        this._y += normalizedDirectionY * this.movementSpeed;
+        this.isMoving.dispatch(this._x, this._y, playerX);
+    }
+    attack() { }
+    takeAttack() { }
+    die() { }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/HealthBarModel.ts":
+/*!*********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/HealthBarModel.ts ***!
+  \*********************************************************************************/
+/*! exports provided: HealthBarModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HealthBarModel", function() { return HealthBarModel; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+
+class HealthBarModel {
+    constructor(playerMaxHealth) {
+        this.playerMaxHealth = playerMaxHealth;
+        this.healthIsChanged = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+    }
+    setHealth(health) {
+        this.healthIsChanged.dispatch(health);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts":
+/*!******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts ***!
+  \******************************************************************************/
+/*! exports provided: PlayerModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerModel", function() { return PlayerModel; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Components_Background_Background__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Components/Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
+/* harmony import */ var _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Controllers/HealthBarController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts");
+
+
+
+class PlayerModel {
+    constructor(playerModelConfig) {
+        this._x = playerModelConfig.x;
+        this._y = playerModelConfig.y;
+        this.halfWidth = playerModelConfig.width / 2;
+        this.halfHeight = playerModelConfig.height / 2;
+        this.health = playerModelConfig.health;
+        this.movementSpeed = playerModelConfig.movementSpeed;
+        this.attackSpeed = playerModelConfig.attackSpeed;
+        this.attackRange = playerModelConfig.attackRange;
+        this.damage = playerModelConfig.damage;
+        this.background = _Components_Background_Background__WEBPACK_IMPORTED_MODULE_1__["Background"].getInstance();
+        this.healthBarController = _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_2__["HealthBarController"].getInstance();
+        this.isMoving = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    static getInstance(playerModelConfig) {
+        if (!PlayerModel.instance && playerModelConfig) {
+            PlayerModel.instance = new PlayerModel(playerModelConfig);
+        }
+        else if (!PlayerModel.instance && !playerModelConfig) {
+            throw new Error("There is not PlayerModelConfig for PlayerModel instance");
+        }
+        return PlayerModel.instance;
+    }
+    move(keys) {
+        if (keys.upIsPressed &&
+            this.background.upSideY + this.halfHeight < this._y - this.movementSpeed) {
+            this._y -= this.movementSpeed;
+        }
+        if (keys.downIsPressed &&
+            this.background.downSideY - this.halfHeight > this._y + this.movementSpeed) {
+            this._y += this.movementSpeed;
+        }
+        if (keys.leftIsPressed &&
+            this.background.leftSideX + this.halfWidth < this._x - this.movementSpeed) {
+            this._x -= this.movementSpeed;
+        }
+        if (keys.rightIsPressed &&
+            this.background.rightSideX - this.halfWidth > this._x + this.movementSpeed) {
+            this._x += this.movementSpeed;
+        }
+        this.isMoving.dispatch(this._x, this._y, keys);
+    }
+    attack() { }
+    getDamage() {
+    }
+    die() { }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts ***!
+  \*****************************************************************************/
+/*! exports provided: TimerModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimerModel", function() { return TimerModel; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+
+class TimerModel {
+    constructor() {
+        this.seconds = 0;
+        this.minutes = 0;
+        this.time = "00:00";
+        this.timeIsChange = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+        this.itsTimeForSpawn = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+    }
+    static getInstance() {
+        if (!TimerModel.instance) {
+            TimerModel.instance = new TimerModel();
+        }
+        return TimerModel.instance;
+    }
+    startTimer() {
+        if (!this.intervalId) {
+            this.intervalId = setInterval(this.changeTime.bind(this), 1000);
+        }
+    }
+    stopTimer() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = undefined;
+        }
+    }
+    changeTime() {
+        if (this.seconds < 59) {
+            this.seconds++;
+        }
+        else if (this.seconds >= 59) {
+            this.seconds = 0;
+            this.minutes++;
+        }
+        this.time = `${this.minutes < 10 ? "0" + this.minutes : this.minutes}:${this.seconds < 10 ? "0" + this.seconds : this.seconds}`;
+        this.timeIsChange.dispatch(this.time);
+        this.itsTimeForSpawn.dispatch(this.minutes);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/WeaponsModel.ts":
+/*!*******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/WeaponsModel.ts ***!
+  \*******************************************************************************/
+/*! exports provided: WeaponsModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponsModel", function() { return WeaponsModel; });
+/* harmony import */ var _Components_Weapon_SelectedWeapons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Components/Weapon/SelectedWeapons */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/SelectedWeapons.ts");
+
+class WeaponsModel {
+    constructor() {
+        const selectedWeapons = _Components_Weapon_SelectedWeapons__WEBPACK_IMPORTED_MODULE_0__["SelectedWeapons"].getInstance();
+        this.meleeWeapon = selectedWeapons.getMeleeWeapon();
+        this.rangeWeapon = selectedWeapons.getRangeWeapon();
+        this.magicWeapon = selectedWeapons.getMagicWeapon();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/EnemyView.ts":
+/*!***************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/EnemyView.ts ***!
+  \***************************************************************************/
+/*! exports provided: EnemyView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyView", function() { return EnemyView; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+
+
+class EnemyView extends _UI_View__WEBPACK_IMPORTED_MODULE_1__["View"] {
+    constructor(enemyModel, enemyController, enemyViewConfig) {
+        super();
+        this.enemyModel = enemyModel;
+        this.enemyController = enemyController;
+        this.enemyViewConfig = enemyViewConfig;
+        this.initEnemyShape();
+        this.connectToModel();
+        this.addCollision();
+    }
+    initEnemyShape() {
+        this.enemySpriteSheet = this.enemyViewConfig.enemySpriteSheet;
+        this.enemyShape = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["AnimatedSprite"](this.enemySpriteSheet.animations.RunRight);
+        this.enemyShape.anchor.set(0.5);
+        this.enemyShape.x = this.enemyModel.x;
+        this.enemyShape.y = this.enemyModel.y;
+        this.enemyShape.width = this.enemyViewConfig.width;
+        this.enemyShape.height = this.enemyViewConfig.height;
+        this.enemyShape.animationSpeed = this.enemyViewConfig.animationSpeed;
+        this.enemyShape.play();
+        this.addChild(this.enemyShape);
+    }
+    connectToModel() {
+        const moveFunc = this.move.bind(this);
+        this.enemyModel.isMoving.add(moveFunc);
+    }
+    move(x, y, playerX) {
+        this.enemyShape.x = x;
+        this.enemyShape.y = y;
+        this.changeAnimation(playerX);
+    }
+    changeAnimation(playerX) {
+        if (playerX < this.enemyShape.x && !this.isRunLeft()) {
+            this.setRunLeftAnimation();
+        }
+        else if (playerX > this.enemyShape.x && !this.isRunRight()) {
+            this.setRunRightAnimation();
+        }
+    }
+    isRunLeft() {
+        if (this.enemyShape.textures == this.enemySpriteSheet.animations.RunLeft) {
+            return true;
+        }
+        return false;
+    }
+    isRunRight() {
+        if (this.enemyShape.textures == this.enemySpriteSheet.animations.RunRight) {
+            return true;
+        }
+        return false;
+    }
+    setRunLeftAnimation() {
+        this.enemyShape.textures = this.enemySpriteSheet.animations.RunLeft;
+        this.enemyShape.play();
+    }
+    setRunRightAnimation() {
+        this.enemyShape.textures = this.enemySpriteSheet.animations.RunRight;
+        this.enemyShape.play();
+    }
+    addCollision() {
+        this.getBounds();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/HealthBarView.ts":
+/*!*******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/HealthBarView.ts ***!
+  \*******************************************************************************/
+/*! exports provided: HealthBarView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HealthBarView", function() { return HealthBarView; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Labels/Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+
+
+
+
+
+class HealthBarView extends _UI_View__WEBPACK_IMPORTED_MODULE_3__["View"] {
+    constructor(healthBarModel, healthBarController) {
+        super();
+        this.healthBarModel = healthBarModel;
+        this.healthBarController = healthBarController;
+        this.playerMaxHealth = healthBarModel.playerMaxHealth;
+        this.barWidth = 500;
+        this.barHeight = 50;
+        this.barColor = 0xff0000; // Red color
+        this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_4__["Gamefield"].getInstance();
+        this.graphics = new PIXI.Graphics();
+        this.addChild(this.graphics);
+        this.drawDefaultHealth();
+        this.setLabel();
+        this.connectToModel();
+        this.createTicker();
+    }
+    setLabel() {
+        const label = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Health: " + this.playerMaxHealth + " / " + this.playerMaxHealth);
+        label.x = 10;
+        label.y = this.height / 2 - label.height / 2;
+        this.label = label;
+        this.addChild(label);
+    }
+    drawDefaultHealth() {
+        // Draw background
+        this.graphics.beginFill(0x000000);
+        this.graphics.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.graphics.endFill();
+        // Draw the border around the rectangle
+        this.graphics.beginFill();
+        // Set the border properties
+        this.graphics.lineStyle(2, 0x000000, 1); // Thickness: 2, Color: Black, Alpha: 1
+        this.graphics.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.graphics.endFill();
+        // Draw health value
+        this.graphics.beginFill(this.barColor);
+        this.graphics.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.graphics.endFill();
+    }
+    connectToModel() {
+        this.healthBarModel.healthIsChanged.add(this.healthIsUpdated.bind(this));
+    }
+    healthIsUpdated(health) {
+        this.graphics.clear();
+        // Draw background
+        this.graphics.beginFill(0x000000);
+        this.graphics.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.graphics.endFill();
+        // Draw the border around the rectangle
+        this.graphics.beginFill();
+        // Set the border properties
+        this.graphics.lineStyle(2, 0x000000, 1); // Thickness: 2, Color: Black, Alpha: 1
+        this.graphics.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.graphics.endFill();
+        // Draw health value
+        const healthRatio = health / this.playerMaxHealth;
+        const barWidth = this.barWidth * healthRatio;
+        this.graphics.beginFill(this.barColor);
+        this.graphics.drawRect(0, 0, barWidth, this.barHeight);
+        this.graphics.endFill();
+        this.label.text =
+            "Health: " + this.playerMaxHealth + " / " + this.playerMaxHealth;
+    }
+    createTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.add(this.holdLabel.bind(this));
+    }
+    holdLabel() {
+        this.x = this.gamefield.pivot.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+        this.y = this.gamefield.pivot.y + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2 - this.height;
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts":
+/*!****************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts ***!
+  \****************************************************************************/
+/*! exports provided: PlayerView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerView", function() { return PlayerView; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+/* harmony import */ var _Components_Background_Background__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+
+
+
+
+
+class PlayerView extends _UI_View__WEBPACK_IMPORTED_MODULE_2__["View"] {
+    constructor(playerModel, playerViewConfig) {
+        super();
+        this.playerModel = playerModel;
+        this.playerViewConfig = playerViewConfig;
+        this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_4__["Gamefield"].getInstance();
+        this.background = _Components_Background_Background__WEBPACK_IMPORTED_MODULE_3__["Background"].getInstance();
+        this.LastWasRight = true;
+        this.initPlayerShape();
+        this.connectToModel();
+    }
+    static getInstance(playerModel, playerViewConfig) {
+        if (!PlayerView.instance && playerModel && playerViewConfig) {
+            PlayerView.instance = new PlayerView(playerModel, playerViewConfig);
+        }
+        else if (!PlayerView.instance) {
+            throw new Error("PlayerView instance has not been initialized");
+        }
+        return PlayerView.instance;
+    }
+    initPlayerShape() {
+        this.playerSpriteSheet = this.playerViewConfig.playerSpriteSheet;
+        this.playerShape = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["AnimatedSprite"](this.playerSpriteSheet.animations.Idle);
+        this.playerShape.anchor.set(0.5);
+        this.playerShape.x = this.playerModel.x;
+        this.playerShape.y = this.playerModel.y;
+        this.playerShape.width = this.playerViewConfig.width;
+        this.playerShape.height = this.playerViewConfig.height;
+        this.playerShape.animationSpeed = this.playerViewConfig.animationSpeed;
+        this.playerShape.play();
+        this.addChild(this.playerShape);
+    }
+    connectToModel() {
+        const moveFunc = this.move.bind(this);
+        this.playerModel.isMoving.add(moveFunc);
+    }
+    move(x, y, keys) {
+        this.playerShape.x = x;
+        this.playerShape.y = y;
+        if (x > this.background.leftSideX + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2 &&
+            x < this.background.rightSideX - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2) {
+            this.gamefield.pivot.x = this.playerShape.x;
+        }
+        if (y > this.background.upSideY + _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2 &&
+            y < this.background.downSideY - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2) {
+            this.gamefield.pivot.y = this.playerShape.y;
+        }
+        this.changeAnimation(keys);
+    }
+    changeAnimation(keys) {
+        if (!keys.upIsPressed &&
+            !keys.downIsPressed &&
+            !keys.leftIsPressed &&
+            !keys.rightIsPressed &&
+            !this.isIdle()) {
+            this.setIdleAnimation();
+        }
+        else if (keys.upIsPressed &&
+            keys.downIsPressed &&
+            keys.leftIsPressed &&
+            keys.rightIsPressed) {
+            if (!this.isIdle()) {
+                this.setIdleAnimation();
+            }
+        }
+        else if (keys.upIsPressed && keys.leftIsPressed && keys.rightIsPressed) {
+            if (this.LastWasRight && !this.isRunRight()) {
+                this.setRunRightAnimation();
+            }
+            else if (!this.LastWasRight && !this.isRunLeft()) {
+                this.setRunLeftAnimation();
+            }
+        }
+        else if (keys.downIsPressed &&
+            keys.leftIsPressed &&
+            keys.rightIsPressed) {
+            if (this.LastWasRight && !this.isRunRight()) {
+                this.setRunRightAnimation();
+            }
+            else if (!this.LastWasRight && !this.isRunLeft()) {
+                this.setRunLeftAnimation();
+            }
+        }
+        else if (keys.upIsPressed && keys.downIsPressed) {
+            if (keys.leftIsPressed && !this.isRunLeft()) {
+                this.setRunLeftAnimation();
+            }
+            else if (keys.rightIsPressed && !this.isRunRight()) {
+                this.setRunRightAnimation();
+            }
+            else if (!keys.leftIsPressed &&
+                !keys.rightIsPressed &&
+                !this.isIdle()) {
+                this.setIdleAnimation();
+            }
+        }
+        else if (keys.upIsPressed) {
+            if ((this.LastWasRight && !this.isRunRight()) ||
+                (keys.rightIsPressed && !this.isRunRight())) {
+                this.setRunRightAnimation();
+            }
+            else if ((!this.LastWasRight && !this.isRunLeft()) ||
+                (keys.leftIsPressed && !this.isRunLeft())) {
+                this.setRunLeftAnimation();
+            }
+        }
+        else if (keys.downIsPressed) {
+            if ((this.LastWasRight && !this.isRunRight()) ||
+                (keys.rightIsPressed && !this.isRunRight())) {
+                this.setRunRightAnimation();
+            }
+            else if ((!this.LastWasRight && !this.isRunLeft()) ||
+                (keys.leftIsPressed && !this.isRunLeft())) {
+                this.setRunLeftAnimation();
+            }
+        }
+        else if (keys.leftIsPressed && keys.rightIsPressed) {
+            if (!this.isIdle()) {
+                this.setIdleAnimation();
+            }
+        }
+        else if (keys.leftIsPressed && !this.isRunLeft()) {
+            this.setRunLeftAnimation();
+        }
+        else if (keys.rightIsPressed && !this.isRunRight()) {
+            this.setRunRightAnimation();
+        }
+    }
+    isRunLeft() {
+        if (this.playerShape.textures == this.playerSpriteSheet.animations.RunLeft) {
+            return true;
+        }
+        return false;
+    }
+    isRunRight() {
+        if (this.playerShape.textures == this.playerSpriteSheet.animations.RunRight) {
+            return true;
+        }
+        return false;
+    }
+    isIdle() {
+        if (this.playerShape.textures == this.playerSpriteSheet.animations.Idle) {
+            return true;
+        }
+        return false;
+    }
+    setIdleAnimation() {
+        this.playerShape.textures = this.playerSpriteSheet.animations.Idle;
+        this.playerShape.play();
+    }
+    setRunLeftAnimation() {
+        this.LastWasRight = false;
+        this.playerShape.textures = this.playerSpriteSheet.animations.RunLeft;
+        this.playerShape.play();
+    }
+    setRunRightAnimation() {
+        this.LastWasRight = true;
+        this.playerShape.textures = this.playerSpriteSheet.animations.RunRight;
+        this.playerShape.play();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/TimerView.ts":
+/*!***************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/TimerView.ts ***!
+  \***************************************************************************/
+/*! exports provided: TimerView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimerView", function() { return TimerView; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _UI_Labels_TimerLabel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Labels/TimerLabel */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/TimerLabel.ts");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+
+
+
+
+
+class TimerView extends _UI_View__WEBPACK_IMPORTED_MODULE_3__["View"] {
+    constructor(timerModel) {
+        super();
+        this.timerModel = timerModel;
+        this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_4__["Gamefield"].getInstance();
+        this.setLabel();
+        this.connectToModel();
+        this.createTicker();
+    }
+    setLabel() {
+        const label = new _UI_Labels_TimerLabel__WEBPACK_IMPORTED_MODULE_2__["TimerLabel"]("00:00");
+        this.label = label;
+        this.addChild(label);
+    }
+    connectToModel() {
+        const changeLabelFucn = this.changeLabel.bind(this);
+        this.timerModel.timeIsChange.add(changeLabelFucn);
+    }
+    changeLabel(time) {
+        this.label.text = time;
+    }
+    createTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.add(this.holdLabel.bind(this));
+    }
+    holdLabel() {
+        this.x = this.gamefield.pivot.x - this.width / 2;
+        this.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/WeaponsView.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/WeaponsView.ts ***!
+  \*****************************************************************************/
+/*! exports provided: WeaponsView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponsView", function() { return WeaponsView; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Labels/Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+/* harmony import */ var _Gamefield__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Gamefield */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Gamefield.ts");
+
+
+
+
+
+
+class WeaponsView extends _UI_View__WEBPACK_IMPORTED_MODULE_4__["View"] {
+    constructor(weaponsModel, weaponsController) {
+        super();
+        this.weaponsModel = weaponsModel;
+        this.weaponsController = weaponsController;
+        this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_5__["Gamefield"].getInstance();
+        this.meleeWeaponLevel = weaponsModel.meleeWeapon.level;
+        this.rangeWeaponLevel = weaponsModel.rangeWeapon.level;
+        this.magicWeaponLevel = weaponsModel.magicWeapon.level;
+        this.generateWeaponSections();
+        this.createTicker();
+    }
+    generateWeaponSections() {
+        this.generateMeleeWeaponSection();
+        this.generateRangeWeaponSection();
+        this.generateMagicWeaponSection();
+    }
+    generateMeleeWeaponSection() {
+        const weaponIco = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_3__["UIComponent"](this.weaponsModel.meleeWeapon.icon);
+        weaponIco.width = 100;
+        weaponIco.height = 100;
+        this.addChild(weaponIco);
+        const weaponLabel = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Level: " + this.meleeWeaponLevel);
+        weaponLabel.x = 110;
+        weaponLabel.y = 30;
+        this.addChild(weaponLabel);
+    }
+    generateRangeWeaponSection() {
+        const weaponIco = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_3__["UIComponent"](this.weaponsModel.rangeWeapon.icon);
+        weaponIco.width = 100;
+        weaponIco.height = 100;
+        weaponIco.y = 120;
+        this.addChild(weaponIco);
+        const weaponLabel = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Level: " + this.rangeWeaponLevel);
+        weaponLabel.x = 110;
+        weaponLabel.y = 150;
+        this.addChild(weaponLabel);
+    }
+    generateMagicWeaponSection() {
+        const weaponIco = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_3__["UIComponent"](this.weaponsModel.magicWeapon.icon);
+        weaponIco.width = 100;
+        weaponIco.height = 100;
+        weaponIco.y = 240;
+        this.addChild(weaponIco);
+        const weaponLabel = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Level: " + this.magicWeaponLevel);
+        weaponLabel.x = 110;
+        weaponLabel.y = 270;
+        this.addChild(weaponLabel);
+    }
+    createTicker() {
+        const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
+        ticker.add(this.holdLabel.bind(this));
+    }
+    holdLabel() {
+        this.x = this.gamefield.pivot.x - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2;
+        this.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSection.ts":
+/*!************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSection.ts ***!
+  \************************************************************************************/
+/*! exports provided: WeaponSection */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponSection", function() { return WeaponSection; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _UI_Labels_SectionLabel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Labels/SectionLabel */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/SectionLabel.ts");
+/* harmony import */ var _WeaponSectionElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./WeaponSectionElement */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSectionElement.ts");
+
+
+
+
+class WeaponSection extends pixi_js__WEBPACK_IMPORTED_MODULE_1__["Container"] {
+    //private weaponsUniqueSymbols: Symbol[];
+    constructor(sectionNumber, name, x, y, width, height, weapons) {
+        super();
+        this.sectionNumber = sectionNumber;
+        this.sectionName = name;
+        this.sectionWidth = width;
+        this.sectionHeight = height;
+        this.x = x;
+        this.y = y;
+        this.selectedWeaponNumber = undefined;
+        this.weapons = weapons;
+        this.IsReady = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+        this.weaponElements = [];
+        this.setBackground();
+        this.setSectionName();
+        this.setWeapons();
+    }
+    setBackground() {
+        const graphics = new PIXI.Graphics();
+        graphics.beginFill(0x686d89);
+        graphics.drawRect(0, 0, this.sectionWidth, this.sectionHeight);
+        graphics.endFill();
+        this.addChild(graphics);
+    }
+    setSectionName() {
+        const label = new _UI_Labels_SectionLabel__WEBPACK_IMPORTED_MODULE_2__["SectionLabel"](this.sectionName);
+        label.x = this.sectionWidth / 2 - label.width / 2;
+        label.y = 0;
+        this.label = label;
+        this.addChild(label);
+    }
+    setWeapons() {
+        const weaponsNumber = this.weapons.length;
+        for (let weapon = 0; weapon < weaponsNumber; weapon++) {
+            const weaponSectionElement = new _WeaponSectionElement__WEBPACK_IMPORTED_MODULE_3__["WeaponSectionElement"](this.sectionName, weapon, this.weapons[weapon], 0, this.label.height +
+                10 +
+                weapon *
+                    ((this.sectionHeight - this.label.height - 10) / weaponsNumber), this.sectionWidth - 20, (this.sectionHeight - 10 * weaponsNumber - 10 - this.label.height) /
+                weaponsNumber);
+            const weaponElementIsPressed = this.weaponElementIsPressed.bind(this);
+            weaponSectionElement.isActive.add(weaponElementIsPressed);
+            this.weaponElements.push(weaponSectionElement);
+            this.addChild(weaponSectionElement);
+        }
+    }
+    weaponElementIsPressed(weaponNumber) {
+        if (this.selectedWeaponNumber == undefined) {
+            this.selectedWeaponNumber = weaponNumber;
+            this.IsReady.dispatch(this.sectionNumber, true);
+        }
+        else if (this.selectedWeaponNumber == weaponNumber) {
+            this.weaponElements[weaponNumber].unPressed();
+            this.selectedWeaponNumber = undefined;
+            this.IsReady.dispatch(this.sectionNumber, false);
+        }
+        else if (this.selectedWeaponNumber != weaponNumber) {
+            this.weaponElements[this.selectedWeaponNumber].unPressed();
+            this.selectedWeaponNumber = weaponNumber;
+            this.IsReady.dispatch(this.sectionNumber, true);
+        }
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSectionElement.ts":
+/*!*******************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSectionElement.ts ***!
+  \*******************************************************************************************/
+/*! exports provided: WeaponSectionElement */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponSectionElement", function() { return WeaponSectionElement; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Labels/Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+/* harmony import */ var _UI_Labels_WeaponNameLabel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Labels/WeaponNameLabel */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/WeaponNameLabel.ts");
+/* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
+/* harmony import */ var _Game_Components_Weapon_SelectedWeapons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Game/Components/Weapon/SelectedWeapons */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Weapon/SelectedWeapons.ts");
+
+
+
+
+
+
+class WeaponSectionElement extends pixi_js__WEBPACK_IMPORTED_MODULE_1__["Container"] {
+    constructor(type, weaponNumber, weapon, x, y, width, height) {
+        super();
+        this.type = type;
+        this.weapon = weapon;
+        this.weaponNumber = weaponNumber;
+        this.sectionWidth = width;
+        this.sectionHeight = height;
+        this.interactive = true;
+        this.isPressed = false;
+        this.isActive = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+        this.selectedWeapons = _Game_Components_Weapon_SelectedWeapons__WEBPACK_IMPORTED_MODULE_5__["SelectedWeapons"].getInstance();
+        this.setPosition(x, y);
+        this.setClicking();
+        this.setBackground();
+        this.fillInSection();
+    }
+    setPosition(x, y) {
+        this.x = x + 10;
+        this.y = y;
+    }
+    setClicking() {
+        this.on("click", this.pressed);
+    }
+    pressed() {
+        if (this.isPressed == false) {
+            this.setGrayBackground();
+            this.isPressed = true;
+            this.setSelectedWeapon();
+            this.isActive.dispatch(this.weaponNumber);
+        }
+        else {
+            this.setNormalBackground();
+            this.isPressed = false;
+            this.isActive.dispatch(this.weaponNumber);
+        }
+    }
+    unPressed() {
+        this.setNormalBackground();
+        this.isPressed = false;
+    }
+    setGrayBackground() {
+        this.background.alpha = 0.5;
+    }
+    setNormalBackground() {
+        this.background.alpha = 1;
+    }
+    setSelectedWeapon() {
+        if (this.type == "Melee") {
+            this.selectedWeapons.setMeleeWeapon(this.weapon);
+        }
+        else if (this.type == "Range") {
+            this.selectedWeapons.setRangeWeapon(this.weapon);
+        }
+        else if (this.type == "Magic") {
+            this.selectedWeapons.setMagicWeapon(this.weapon);
+        }
+    }
+    setBackground() {
+        const graphics = new PIXI.Graphics();
+        graphics.beginFill(0x858bad);
+        graphics.drawRect(0, 0, this.sectionWidth, this.sectionHeight);
+        graphics.endFill();
+        this.background = graphics;
+        this.addChild(graphics);
+    }
+    fillInSection() {
+        this.setWeaponIcon();
+        this.setWeaponName();
+        this.setWeaponCharacteristics();
+    }
+    setWeaponIcon() {
+        const weaponIco = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_4__["UIComponent"](this.weapon.icon);
+        weaponIco.x = 10;
+        weaponIco.y = 10;
+        weaponIco.width = 100;
+        weaponIco.height = 100;
+        this.addChild(weaponIco);
+    }
+    setWeaponName() {
+        const weaponName = new _UI_Labels_WeaponNameLabel__WEBPACK_IMPORTED_MODULE_3__["WeaponNameLabel"](this.weapon.name.toUpperCase());
+        weaponName.x = this.sectionWidth / 2 - weaponName.width / 2;
+        weaponName.y = 10;
+        this.addChild(weaponName);
+    }
+    setWeaponCharacteristics() {
+        this.setAttackRange();
+        this.setAttackSpeed();
+        this.setDamage();
+    }
+    setAttackRange() {
+        const attackRange = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Attack range: " + this.weapon.attackRange);
+        attackRange.x = this.sectionWidth / 2 - attackRange.width / 2;
+        ; //this.sectionWidth / 2 - attackRange.width / 2;
+        attackRange.y = 60;
+        this.addChild(attackRange);
+    }
+    setAttackSpeed() {
+        const attackSpeed = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Attack speed: " + this.weapon.attackSpeed);
+        attackSpeed.x = this.sectionWidth / 2 - attackSpeed.width / 2; //this.sectionWidth / 2 - attackSpeed.width / 2;
+        attackSpeed.y = 120;
+        this.addChild(attackSpeed);
+    }
+    setDamage() {
+        const damage = new _UI_Labels_Label__WEBPACK_IMPORTED_MODULE_2__["Label"]("Damage: " + this.weapon.damage);
+        damage.x = this.sectionWidth / 2 - damage.width / 2;
+        ; //this.sectionWidth / 2 - damage.width / 2;
+        damage.y = 180;
+        this.addChild(damage);
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSelectionMenu.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSelectionMenu.ts ***!
+  \******************************************************************************************/
+/*! exports provided: WeaponSelectionMenu */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponSelectionMenu", function() { return WeaponSelectionMenu; });
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
+/* harmony import */ var _Game_Configs_WeaponsConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Game/Configs/WeaponsConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/WeaponsConfig.ts");
+/* harmony import */ var _WeaponSection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./WeaponSection */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSection.ts");
+
+
+
+
+
+class WeaponSelectionMenu extends pixi_js__WEBPACK_IMPORTED_MODULE_1__["Container"] {
+    constructor() {
+        super();
+        this.menuWidth = (_Application__WEBPACK_IMPORTED_MODULE_2__["App"].width / 10) * 7;
+        this.menuHeight = (_Application__WEBPACK_IMPORTED_MODULE_2__["App"].height / 10) * 6;
+        this.x = _Application__WEBPACK_IMPORTED_MODULE_2__["App"].width / 2 - this.menuWidth / 2;
+        this.y = _Application__WEBPACK_IMPORTED_MODULE_2__["App"].height / 2 - this.menuHeight / 2;
+        this.readinessOfAllSections = [false, false, false];
+        this.isReady = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+        this.SetBackground();
+        this.setWeaponSections();
+    }
+    SetBackground() {
+        const graphics = new PIXI.Graphics();
+        graphics.beginFill(0x4a4e64);
+        graphics.drawRect(0, 0, this.menuWidth, this.menuHeight);
+        graphics.endFill();
+        this.addChild(graphics);
+    }
+    setWeaponSections() {
+        const weaponsConfig = new _Game_Configs_WeaponsConfig__WEBPACK_IMPORTED_MODULE_3__["WeaponsConfig"]();
+        const sectionWidth = this.menuWidth / 3 - 12.5;
+        const sectionHeight = this.menuHeight - 20;
+        this.weaponSections = [
+            new _WeaponSection__WEBPACK_IMPORTED_MODULE_4__["WeaponSection"](0, "Melee", 10, 10, sectionWidth, sectionHeight, weaponsConfig.meleeWeapons),
+            new _WeaponSection__WEBPACK_IMPORTED_MODULE_4__["WeaponSection"](1, "Range", sectionWidth + 20, 10, sectionWidth, sectionHeight, weaponsConfig.rangeWeapons),
+            new _WeaponSection__WEBPACK_IMPORTED_MODULE_4__["WeaponSection"](2, "Magic", sectionWidth * 2 + 30, 10, sectionWidth, sectionHeight, weaponsConfig.magicWeapons),
+        ];
+        this.weaponSections.forEach((weaponSection) => {
+            const weaponSectionIsChanged = this.weaponSectionIsChanged.bind(this);
+            weaponSection.IsReady.add(weaponSectionIsChanged);
+        });
+        this.addChild(this.weaponSections[0]);
+        this.addChild(this.weaponSections[1]);
+        this.addChild(this.weaponSections[2]);
+    }
+    weaponSectionIsChanged(sectionNumber, ready) {
+        this.readinessOfAllSections[sectionNumber] = ready;
+        this.checkReadinessOfMenu();
+    }
+    checkReadinessOfMenu() {
+        for (let i = 0; i < this.readinessOfAllSections.length; i++) {
+            if (this.readinessOfAllSections[i] == false) {
+                this.isReady.dispatch(false);
+                return;
+            }
+        }
+        this.isReady.dispatch(true);
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
 
 /***/ }),
 
@@ -44208,8 +46436,11 @@ class MenuController {
     constructor(menuModel) {
         MenuController.menuModel = menuModel;
     }
-    GameStartButtonIsPressed() {
-        MenuController.menuModel.startGameScene();
+    ButtonPlayIsPressed() {
+        MenuController.menuModel.ShowWeaponSelection();
+    }
+    ButtonStartGameIsPressed() {
+        MenuController.menuModel.StartGameScene();
     }
 }
 
@@ -44248,31 +46479,20 @@ class MenuScene extends _SceneManagment_Scene__WEBPACK_IMPORTED_MODULE_0__["Scen
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuModel", function() { return MenuModel; });
-/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-signals */ "./node_modules/mini-signals/dist/index.js");
+/* harmony import */ var mini_signals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mini_signals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Game */ "./src/by/Drozd/VampireSurvivorsClone/Game.ts");
+
 
 class MenuModel {
-    constructor() { }
-    startGameScene() {
-        _Game__WEBPACK_IMPORTED_MODULE_0__["Game"].showGameScene();
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts":
-/*!***********************************************************************************!*\
-  !*** ./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Resources/MenuViewModel.ts ***!
-  \***********************************************************************************/
-/*! exports provided: MenuViewModel */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuViewModel", function() { return MenuViewModel; });
-class MenuViewModel {
     constructor() {
-        this.backgroundImage = "./assets/Backgrounds/menuBackground.jpg";
+        this.PlayButtonPressed = new mini_signals__WEBPACK_IMPORTED_MODULE_0__["MiniSignal"]();
+    }
+    ShowWeaponSelection() {
+        this.PlayButtonPressed.dispatch();
+    }
+    StartGameScene() {
+        _Game__WEBPACK_IMPORTED_MODULE_1__["Game"].showGameScene();
     }
 }
 
@@ -44291,35 +46511,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuView", function() { return MenuView; });
 /* harmony import */ var _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../UI/UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
 /* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Application */ "./src/Application.ts");
-/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
-/* harmony import */ var _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Buttons/MenuButton */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts");
+/* harmony import */ var _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Buttons/MenuButton */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts");
+/* harmony import */ var _UI_View__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/View */ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts");
+/* harmony import */ var _Components_WeaponSelectionMenu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Components/WeaponSelectionMenu */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Menu/Components/WeaponSelectionMenu.ts");
+/* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
 
 
 
 
-class MenuView extends _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor(menuController, menuViewModel) {
+
+
+class MenuView extends _UI_View__WEBPACK_IMPORTED_MODULE_3__["View"] {
+    constructor(menuModel, menuController) {
         super();
         this.menuController = menuController;
-        this.menuViewModel = menuViewModel;
+        this.menuModel = menuModel;
+        this.subscribeToModel();
         this.setBackgroundImage();
-        this.setButtons();
+        this.setPlayButton();
+    }
+    subscribeToModel() {
+        this.menuModel.PlayButtonPressed.add(this.showWeaponSelection.bind(this));
     }
     setBackgroundImage() {
-        const backgroundImage = pixi_js__WEBPACK_IMPORTED_MODULE_2__["Sprite"].from(this.menuViewModel.backgroundImage);
+        const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_5__["ResourceManager"].getInstance();
+        const backgroundImage = new _UI_UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"](resourceManager.getTexture("menuBackground"));
         backgroundImage.width = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width;
         backgroundImage.height = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height;
         this.addChild(backgroundImage);
     }
-    setButtons() {
-        this.setPlayButton();
-    }
     setPlayButton() {
-        const buttonPlay = new _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_3__["MenuButton"]("Play");
-        buttonPlay.on("click", this.menuController.GameStartButtonIsPressed);
-        buttonPlay.x = (_Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2) - (buttonPlay.getWidth() / 2);
-        buttonPlay.y = (_Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2) - (buttonPlay.getHeight() / 2);
+        const buttonPlay = new _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_2__["MenuButton"]("Play");
+        buttonPlay.on("click", this.menuController.ButtonPlayIsPressed);
+        buttonPlay.x = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2 - buttonPlay.getWidth() / 2;
+        buttonPlay.y = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2 - buttonPlay.getHeight() / 2;
+        this.buttonPlay = buttonPlay;
         this.addChild(buttonPlay);
+    }
+    showWeaponSelection() {
+        this.removePlayButton();
+        this.setWeaponSelectionMenu();
+        this.setGameStartButton();
+    }
+    removePlayButton() {
+        this.removeChild(this.buttonPlay);
+    }
+    setWeaponSelectionMenu() {
+        const weaponSelectionMenu = new _Components_WeaponSelectionMenu__WEBPACK_IMPORTED_MODULE_4__["WeaponSelectionMenu"]();
+        weaponSelectionMenu.isReady.add(this.selectionMenuIsChanged.bind(this));
+        this.addChild(weaponSelectionMenu);
+    }
+    selectionMenuIsChanged(ready) {
+        if (ready) {
+            this.buttonStartGame.makeActive();
+        }
+        else {
+            this.buttonStartGame.makeInactive();
+        }
+    }
+    setGameStartButton() {
+        const buttonStartGame = new _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_2__["MenuButton"]("Start Game");
+        buttonStartGame.makeInactive();
+        buttonStartGame.on("click", this.menuController.ButtonStartGameIsPressed);
+        buttonStartGame.x = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].width / 2 - buttonStartGame.getWidth() / 2;
+        buttonStartGame.y = (_Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 10) * 9 - buttonStartGame.getHeight() / 2;
+        this.buttonStartGame = buttonStartGame;
+        this.addChild(buttonStartGame);
     }
 }
 
@@ -44339,8 +46596,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UIComponents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIComponents */ "./src/by/Drozd/VampireSurvivorsClone/UI/UIComponents.ts");
 
 class Button extends _UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
-    constructor() {
-        super();
+    constructor(texture) {
+        super(texture);
+        this.isActive = true;
         this.buttonMode = true;
         this.interactive = true;
         this.setHoverEvents();
@@ -44357,6 +46615,20 @@ class Button extends _UIComponents__WEBPACK_IMPORTED_MODULE_0__["UIComponent"] {
         this.alpha = 0.75;
     }
     onButtonOut() {
+        this.alpha = 1;
+    }
+    makeInactive() {
+        this.removeListener("pointerdown", this.onButtonDown)
+            .removeListener("pointerover", this.onButtonOver)
+            .removeListener("pointerout", this.onButtonOut);
+        this.buttonMode = false;
+        this.interactive = false;
+        this.alpha = 0.5;
+    }
+    makeActive() {
+        this.setHoverEvents();
+        this.buttonMode = true;
+        this.interactive = true;
         this.alpha = 1;
     }
 }
@@ -44384,7 +46656,7 @@ class LabelButton extends _Button__WEBPACK_IMPORTED_MODULE_1__["Button"] {
         this.setLabel(label);
     }
     setLabel(label) {
-        const style = new _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"];
+        const style = new _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"]();
         let textElement = new PIXI.Text(label, style);
         this.addChild(textElement);
         this.textWidth = textElement.width;
@@ -44424,6 +46696,115 @@ class MenuButton extends _LabelButton__WEBPACK_IMPORTED_MODULE_1__["LabelButton"
     }
     setMenuTextStyle() {
         this.textElement.style = new _Style_TextStyle_MenuTextStyle__WEBPACK_IMPORTED_MODULE_0__["MenuTextStyle"]();
+        this.textWidth = this.textElement.width;
+        this.textHeight = this.textElement.height;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts":
+/*!***************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts ***!
+  \***************************************************************/
+/*! exports provided: Label */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Label", function() { return Label; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Style/TextStyle/DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+
+
+class Label extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Text"] {
+    constructor(text) {
+        if (typeof text == "number") {
+            super(text.toString());
+        }
+        else {
+            super(text);
+        }
+        this.style = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"](new _Style_TextStyle_DefaultTextStyle__WEBPACK_IMPORTED_MODULE_1__["DefaultTextStyle"]);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/SectionLabel.ts":
+/*!**********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Labels/SectionLabel.ts ***!
+  \**********************************************************************/
+/*! exports provided: SectionLabel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SectionLabel", function() { return SectionLabel; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Style_TextStyle_WeaponSectionTextStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Style/TextStyle/WeaponSectionTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponSectionTextStyle.ts");
+/* harmony import */ var _Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+
+
+
+class SectionLabel extends _Label__WEBPACK_IMPORTED_MODULE_2__["Label"] {
+    constructor(text) {
+        super(text);
+        this.style = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"](new _Style_TextStyle_WeaponSectionTextStyle__WEBPACK_IMPORTED_MODULE_1__["WeaponSectionTextStyle"]);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/TimerLabel.ts":
+/*!********************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Labels/TimerLabel.ts ***!
+  \********************************************************************/
+/*! exports provided: TimerLabel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimerLabel", function() { return TimerLabel; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Style_TextStyle_TimerTextStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Style/TextStyle/TimerTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/TimerTextStyle.ts");
+/* harmony import */ var _Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+
+
+
+class TimerLabel extends _Label__WEBPACK_IMPORTED_MODULE_2__["Label"] {
+    constructor(text) {
+        super(text);
+        this.style = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"](new _Style_TextStyle_TimerTextStyle__WEBPACK_IMPORTED_MODULE_1__["TimerTextStyle"]);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/WeaponNameLabel.ts":
+/*!*************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Labels/WeaponNameLabel.ts ***!
+  \*************************************************************************/
+/*! exports provided: WeaponNameLabel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponNameLabel", function() { return WeaponNameLabel; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Style_TextStyle_WeaponNameTextStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Style/TextStyle/WeaponNameTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponNameTextStyle.ts");
+/* harmony import */ var _Label__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Label */ "./src/by/Drozd/VampireSurvivorsClone/UI/Labels/Label.ts");
+
+
+
+class WeaponNameLabel extends _Label__WEBPACK_IMPORTED_MODULE_2__["Label"] {
+    constructor(text) {
+        super(text);
+        this.style = new pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"](new _Style_TextStyle_WeaponNameTextStyle__WEBPACK_IMPORTED_MODULE_1__["WeaponNameTextStyle"]);
     }
 }
 
@@ -44446,7 +46827,7 @@ class DefaultTextStyle extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"]
     constructor() {
         super();
         this.fontFamily = "Palatino Linotype";
-        this.fontSize = 80;
+        this.fontSize = 26;
         this.fontStyle = "italic";
         this.fontWeight = "bold";
         this.fill = ["#E0E0E0"]; // gradient ['#ffffff'; '#00ff99']
@@ -44481,6 +46862,73 @@ __webpack_require__.r(__webpack_exports__);
 class MenuTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
     constructor() {
         super();
+        this.fontSize = 80;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/TimerTextStyle.ts":
+/*!*********************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/TimerTextStyle.ts ***!
+  \*********************************************************************************/
+/*! exports provided: TimerTextStyle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimerTextStyle", function() { return TimerTextStyle; });
+/* harmony import */ var _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+
+class TimerTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
+    constructor() {
+        super();
+        this.fontSize = 40;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponNameTextStyle.ts":
+/*!**************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponNameTextStyle.ts ***!
+  \**************************************************************************************/
+/*! exports provided: WeaponNameTextStyle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponNameTextStyle", function() { return WeaponNameTextStyle; });
+/* harmony import */ var _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+
+class WeaponNameTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
+    constructor() {
+        super();
+        this.fontSize = 30;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponSectionTextStyle.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/WeaponSectionTextStyle.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: WeaponSectionTextStyle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeaponSectionTextStyle", function() { return WeaponSectionTextStyle; });
+/* harmony import */ var _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultTextStyle */ "./src/by/Drozd/VampireSurvivorsClone/UI/Style/TextStyle/DefaultTextStyle.ts");
+
+class WeaponSectionTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
+    constructor() {
+        super();
+        this.fontSize = 40;
     }
 }
 
@@ -44505,6 +46953,24 @@ class UIComponent extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Sprite"] {
 
 /***/ }),
 
+/***/ "./src/by/Drozd/VampireSurvivorsClone/UI/View.ts":
+/*!*******************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/UI/View.ts ***!
+  \*******************************************************/
+/*! exports provided: View */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "View", function() { return View; });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+
+class View extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Container"] {
+}
+
+
+/***/ }),
+
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
@@ -44514,14 +46980,11 @@ class UIComponent extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Sprite"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(PIXI) {/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Application */ "./src/Application.ts");
+/* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Application */ "./src/Application.ts");
 
-//for inspector in browser
-window.__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
-    window.__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI });
 const app = new _Application__WEBPACK_IMPORTED_MODULE_0__["App"]();
+window.__PIXI_APP__ = app;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js")))
 
 /***/ })
 

@@ -1,20 +1,24 @@
-import { EnemyConfig } from "../../Configs/EnemyConfig";
+import { EnemyModelConfig } from "../../Configs/ModelConfigs/EnemyModelConfig";
+import { EnemyViewConfig } from "../../Configs/ViewConfigs/EnemyViewConfig";
+import { EnemyController } from "../../Controllers/EnemyController";
+import { EnemyModel } from "../../Models/EnemyModel";
+import { EnemyView } from "../../Views/EnemyView";
 
-export abstract class Enemy {
-  health: number;
-  movementSpeed: number;
-  attackSpeed: number;
-  attackRange: number;
-  damage: number;
-  attackType: number;
+export class Enemy {
+  private enemyModel: EnemyModel;
+  private enemyController: EnemyController;
+  private enemyView: EnemyView;
 
-  constructor(enemyConfig: EnemyConfig) {
-    this.health = enemyConfig.health;
-    this.movementSpeed = enemyConfig.movementSpeed;
-    this.attackSpeed = enemyConfig.attackSpeed;
-    this.attackRange = enemyConfig.attackRange;
-    this.damage = enemyConfig.damage;
-    this.attackType = enemyConfig.attackType;
-    console.log("Enemy was created!");
+  public constructor(
+    enemyModelConfig: EnemyModelConfig,
+    enemyViewConfig: EnemyViewConfig
+  ) {
+    this.enemyModel = new EnemyModel(enemyModelConfig);
+    this.enemyController = new EnemyController(this.enemyModel);
+    this.enemyView = new EnemyView(
+      this.enemyModel,
+      this.enemyController,
+      enemyViewConfig
+    );
   }
 }

@@ -4,7 +4,7 @@ export class DefaultTextStyle extends TextStyle {
   public constructor() {
     super();
     this.fontFamily = "Palatino Linotype";
-    this.fontSize = 80;
+    this.fontSize = 26;
     this.fontStyle = "italic";
     this.fontWeight = "bold";
     this.fill = ["#E0E0E0"]; // gradient ['#ffffff'; '#00ff99']

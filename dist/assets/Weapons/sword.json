@@ -1,0 +1,63 @@
+{"frames": {
+
+"sword_1.png":
+{
+	"frame": {"x":0,"y":0,"w":126,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":150},
+	"sourceSize": {"w":126,"h":150}
+},
+"sword_2.png":
+{
+	"frame": {"x":126,"y":0,"w":124,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":150},
+	"sourceSize": {"w":124,"h":150}
+},
+"sword_3.png":
+{
+	"frame": {"x":0,"y":150,"w":125,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":150},
+	"sourceSize": {"w":125,"h":150}
+},
+"sword_4.png":
+{
+	"frame": {"x":125,"y":150,"w":126,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":150},
+	"sourceSize": {"w":126,"h":150}
+},
+"sword_5.png":
+{
+	"frame": {"x":0,"y":300,"w":124,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":150},
+	"sourceSize": {"w":124,"h":150}
+},
+"sword_6.png":
+{
+	"frame": {"x":124,"y":300,"w":125,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":150},
+	"sourceSize": {"w":125,"h":150}
+}},
+"animations": {
+	"attack": ["sword_1.png","sword_2.png","sword_3.png","sword_4.png","sword_5.png","sword_6.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "sword.png",
+	"format": "RGBA8888",
+	"size": {"w":251,"h":450},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1b813d9bb6df0e7018172a1715d12494:4ed9a359ebb9592e51130e98482b4868:13c8efc8a913b90b6edc68b2afe036e4$"
+}
+}

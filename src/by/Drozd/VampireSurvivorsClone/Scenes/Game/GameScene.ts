@@ -1,9 +1,15 @@
 import { Scene } from "../../SceneManagment/Scene";
-import { GamefieldView } from "./Components/Gamefield/GamefieldView";
+import { Gamefield } from "./Gamefield";
 
 export class GameScene extends Scene {
-  constructor(gamefieldView: GamefieldView) {
+  constructor() {
     super();
-    this.addChild(gamefieldView);
+    this.addGamefield();
+  }
+
+  private addGamefield() {
+    const gamefield = Gamefield.getInstance();
+    this.addChild(gamefield);
+    gamefield.startGame();
   }
 }
