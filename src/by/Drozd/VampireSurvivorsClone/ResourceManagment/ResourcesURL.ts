@@ -1,7 +1,7 @@
 export class ResourcesURL {
   public static resources: Record<string, string> = {
     menuBackground: "./assets/Backgrounds/menuBackground.jpg",
-    gamefieldBackgroundTile: "assets/Backgrounds/Tiles/niceTile.png",
+    gamefieldBackgroundTile: "assets/Backgrounds/Tiles/tile.png",
     player: "assets/Player/player.json",
     fiend: "assets/Enemies/fiend.json",
     leshy: "assets/Enemies/leshy.json",

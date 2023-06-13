@@ -42,6 +42,6 @@ export class TimerView extends View {
 
   private holdLabel(): void {
     this.x = this.gamefield.pivot.x - this.width / 2;
-    this.y = this.gamefield.pivot.y - App.height / 2;
+    this.y = this.gamefield.pivot.y - App.height / 2 + 10;
   }
 }

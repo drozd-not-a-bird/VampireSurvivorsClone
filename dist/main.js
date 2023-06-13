@@ -43942,6 +43942,17 @@ App.resolution = 1;
 
 /***/ }),
 
+/***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Background/Background.json":
+/*!*******************************************************************************!*\
+  !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Background/Background.json ***!
+  \*******************************************************************************/
+/*! exports provided: background, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"background\":{\"stepsInWidth\":10,\"stepsInHeight\":10,\"textureScale\":1,\"textureWidth\":512,\"textureHeight\":512}}");
+
+/***/ }),
+
 /***/ "./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json":
 /*!***********************************************************************!*\
   !*** ./src/by/Drozd/VampireSurvivorsClone/Configs/Enemys/enemys.json ***!
@@ -44136,7 +44147,7 @@ class ResourcesURL {
 }
 ResourcesURL.resources = {
     menuBackground: "./assets/Backgrounds/menuBackground.jpg",
-    gamefieldBackgroundTile: "assets/Backgrounds/Tiles/niceTile.png",
+    gamefieldBackgroundTile: "assets/Backgrounds/Tiles/tile.png",
     player: "assets/Player/player.json",
     fiend: "assets/Enemies/fiend.json",
     leshy: "assets/Enemies/leshy.json",
@@ -44450,13 +44461,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GameStopButton extends _UI_Buttons_Button__WEBPACK_IMPORTED_MODULE_3__["Button"] {
-    constructor() {
+    constructor(buttonContinue) {
         const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_2__["ResourceManager"].getInstance();
         super(resourceManager.getTexture("stopButton"));
         this.isClicked = false;
         this.gamefield = _Gamefield__WEBPACK_IMPORTED_MODULE_4__["Gamefield"].getInstance();
         this.timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_5__["TimerModel"].getInstance();
         this.createDarkOverlay();
+        this.buttonContinue = buttonContinue;
+        this.buttonContinue.on("click", this.continueGame.bind(this));
         this.createTicker();
         this.on("click", this.clicked.bind(this));
     }
@@ -44475,12 +44488,19 @@ class GameStopButton extends _UI_Buttons_Button__WEBPACK_IMPORTED_MODULE_3__["Bu
         ticker.start();
         this.timerModel.startTimer();
         this.darkOverlay.visible = false;
+        this.buttonContinue.visible = false;
     }
     stopGame() {
         const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
         ticker.stop();
         this.timerModel.stopTimer();
         this.darkOverlay.visible = true;
+        this.generateContinueButton();
+    }
+    generateContinueButton() {
+        this.buttonContinue.visible = true;
+        this.buttonContinue.x = this.gamefield.pivot.x - this.buttonContinue.getWidth() / 2;
+        this.buttonContinue.y = this.gamefield.pivot.y - 50 - this.buttonContinue.getHeight() / 2;
     }
     createTicker() {
         const ticker = pixi_js__WEBPACK_IMPORTED_MODULE_0__["Ticker"].shared;
@@ -44836,14 +44856,17 @@ class PlayerModelConfig {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BackgroundConfig", function() { return BackgroundConfig; });
 /* harmony import */ var _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../ResourceManagment/ResourceManager */ "./src/by/Drozd/VampireSurvivorsClone/ResourceManagment/ResourceManager.ts");
+/* harmony import */ var _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../Configs/Background/Background.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Background/Background.json");
+var _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../../../Configs/Background/Background.json */ "./src/by/Drozd/VampireSurvivorsClone/Configs/Background/Background.json", 1);
+
 
 class BackgroundConfig {
     constructor() {
-        this.stepsInWidth = 10;
-        this.stepsInHeight = 10;
-        this.textureScale = 2;
-        this.textureWidth = 256;
-        this.textureHeight = 256;
+        this.stepsInWidth = _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__["background"].stepsInWidth;
+        this.stepsInHeight = _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__["background"].stepsInHeight;
+        this.textureScale = _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__["background"].textureScale;
+        this.textureWidth = _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__["background"].textureWidth;
+        this.textureHeight = _Configs_Background_Background_json__WEBPACK_IMPORTED_MODULE_1__["background"].textureHeight;
         const resourceManager = _ResourceManagment_ResourceManager__WEBPACK_IMPORTED_MODULE_0__["ResourceManager"].getInstance();
         this.backgroundTileTexture = resourceManager.getTexture("gamefieldBackgroundTile");
     }
@@ -45231,23 +45254,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Gamefield", function() { return Gamefield; });
 /* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
 /* harmony import */ var _Application__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../Application */ "./src/Application.ts");
-/* harmony import */ var _Components_Background_Background__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Components/Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
-/* harmony import */ var _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/CollisionDetector/CollisionDetector */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/CollisionDetector/CollisionDetector.ts");
-/* harmony import */ var _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/Enemy/EnemySpawner */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts");
-/* harmony import */ var _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Components/GameStopButton/GameStopButton */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/GameStopButton/GameStopButton.ts");
-/* harmony import */ var _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Configs/ModelConfigs/GamefieldModelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/GamefieldModelConfig.ts");
-/* harmony import */ var _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Configs/ViewConfigs/GamefieldViewConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/GamefieldViewConfig.ts");
-/* harmony import */ var _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Controllers/HealthBarController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts");
-/* harmony import */ var _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Controllers/PlayerController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/PlayerController.ts");
-/* harmony import */ var _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Controllers/WeaponsController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/WeaponsController.ts");
-/* harmony import */ var _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Models/HealthBarModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/HealthBarModel.ts");
-/* harmony import */ var _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Models/PlayerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts");
-/* harmony import */ var _Models_TimerModel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Models/TimerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts");
-/* harmony import */ var _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Models/WeaponsModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/WeaponsModel.ts");
-/* harmony import */ var _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Views/HealthBarView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/HealthBarView.ts");
-/* harmony import */ var _Views_PlayerView__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Views/PlayerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts");
-/* harmony import */ var _Views_TimerView__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Views/TimerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/TimerView.ts");
-/* harmony import */ var _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Views/WeaponsView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/WeaponsView.ts");
+/* harmony import */ var _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../UI/Buttons/MenuButton */ "./src/by/Drozd/VampireSurvivorsClone/UI/Buttons/MenuButton.ts");
+/* harmony import */ var _Components_Background_Background__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/Background/Background */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Background/Background.ts");
+/* harmony import */ var _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/CollisionDetector/CollisionDetector */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/CollisionDetector/CollisionDetector.ts");
+/* harmony import */ var _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Components/Enemy/EnemySpawner */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/Enemy/EnemySpawner.ts");
+/* harmony import */ var _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Components/GameStopButton/GameStopButton */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Components/GameStopButton/GameStopButton.ts");
+/* harmony import */ var _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Configs/ModelConfigs/GamefieldModelConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ModelConfigs/GamefieldModelConfig.ts");
+/* harmony import */ var _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Configs/ViewConfigs/GamefieldViewConfig */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Configs/ViewConfigs/GamefieldViewConfig.ts");
+/* harmony import */ var _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Controllers/HealthBarController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/HealthBarController.ts");
+/* harmony import */ var _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Controllers/PlayerController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/PlayerController.ts");
+/* harmony import */ var _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Controllers/WeaponsController */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Controllers/WeaponsController.ts");
+/* harmony import */ var _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Models/HealthBarModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/HealthBarModel.ts");
+/* harmony import */ var _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Models/PlayerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/PlayerModel.ts");
+/* harmony import */ var _Models_TimerModel__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Models/TimerModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/TimerModel.ts");
+/* harmony import */ var _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Models/WeaponsModel */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Models/WeaponsModel.ts");
+/* harmony import */ var _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Views/HealthBarView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/HealthBarView.ts");
+/* harmony import */ var _Views_PlayerView__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Views/PlayerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/PlayerView.ts");
+/* harmony import */ var _Views_TimerView__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Views/TimerView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/TimerView.ts");
+/* harmony import */ var _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Views/WeaponsView */ "./src/by/Drozd/VampireSurvivorsClone/Scenes/Game/Views/WeaponsView.ts");
+
 
 
 
@@ -45294,48 +45319,51 @@ class Gamefield extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["Container"] {
         this.y = _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
     }
     addConfigs() {
-        this.modelConfig = new _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_6__["GamefieldModelConfig"]();
-        this.viewConfig = new _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_7__["GamefieldViewConfig"]();
+        this.modelConfig = new _Configs_ModelConfigs_GamefieldModelConfig__WEBPACK_IMPORTED_MODULE_7__["GamefieldModelConfig"]();
+        this.viewConfig = new _Configs_ViewConfigs_GamefieldViewConfig__WEBPACK_IMPORTED_MODULE_8__["GamefieldViewConfig"]();
     }
     generateBackground() {
-        const background = _Components_Background_Background__WEBPACK_IMPORTED_MODULE_2__["Background"].getInstance(this.viewConfig.backgroundConfig);
+        const background = _Components_Background_Background__WEBPACK_IMPORTED_MODULE_3__["Background"].getInstance(this.viewConfig.backgroundConfig);
         background.x -= background.getWidth() / 2;
         background.y -= background.getHeight() / 2;
         background.generateCoordinatesOfTheSides();
         this.addChild(background);
     }
     generatePlayer() {
-        const playerModel = _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_12__["PlayerModel"].getInstance(this.modelConfig.playerModelConfig);
-        const playerController = new _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_9__["PlayerController"](playerModel);
-        const playerView = _Views_PlayerView__WEBPACK_IMPORTED_MODULE_16__["PlayerView"].getInstance(playerModel, this.viewConfig.playerViewConfig);
+        const playerModel = _Models_PlayerModel__WEBPACK_IMPORTED_MODULE_13__["PlayerModel"].getInstance(this.modelConfig.playerModelConfig);
+        const playerController = new _Controllers_PlayerController__WEBPACK_IMPORTED_MODULE_10__["PlayerController"](playerModel);
+        const playerView = _Views_PlayerView__WEBPACK_IMPORTED_MODULE_17__["PlayerView"].getInstance(playerModel, this.viewConfig.playerViewConfig);
         this.addChild(playerView);
     }
     generateWeapons() {
-        const weaponsModel = new _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_14__["WeaponsModel"]();
-        const weaponsController = new _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_10__["WeaponsController"](weaponsModel);
-        const weaponsView = new _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_18__["WeaponsView"](weaponsModel, weaponsController);
+        const weaponsModel = new _Models_WeaponsModel__WEBPACK_IMPORTED_MODULE_15__["WeaponsModel"]();
+        const weaponsController = new _Controllers_WeaponsController__WEBPACK_IMPORTED_MODULE_11__["WeaponsController"](weaponsModel);
+        const weaponsView = new _Views_WeaponsView__WEBPACK_IMPORTED_MODULE_19__["WeaponsView"](weaponsModel, weaponsController);
         this.addChild(weaponsView);
     }
     generateTimer() {
-        const timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_13__["TimerModel"].getInstance();
+        const timerModel = _Models_TimerModel__WEBPACK_IMPORTED_MODULE_14__["TimerModel"].getInstance();
         timerModel.startTimer();
-        const timerView = new _Views_TimerView__WEBPACK_IMPORTED_MODULE_17__["TimerView"](timerModel);
+        const timerView = new _Views_TimerView__WEBPACK_IMPORTED_MODULE_18__["TimerView"](timerModel);
         this.addChild(timerView);
     }
     generateEnemys() {
-        const enemySpawner = _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_4__["EnemySpawner"].getInstance(this.modelConfig.enemySpawnConfig, this.modelConfig.enemysModelsConfigs, this.viewConfig.enemysViewsConfigs);
+        const enemySpawner = _Components_Enemy_EnemySpawner__WEBPACK_IMPORTED_MODULE_5__["EnemySpawner"].getInstance(this.modelConfig.enemySpawnConfig, this.modelConfig.enemysModelsConfigs, this.viewConfig.enemysViewsConfigs);
     }
     generateHealthBar() {
-        const healthBarModel = new _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_11__["HealthBarModel"](this.modelConfig.playerModelConfig.health);
-        const healthBarController = _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_8__["HealthBarController"].getInstance(healthBarModel);
-        const healthBarView = new _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_15__["HealthBarView"](healthBarModel, healthBarController);
+        const healthBarModel = new _Models_HealthBarModel__WEBPACK_IMPORTED_MODULE_12__["HealthBarModel"](this.modelConfig.playerModelConfig.health);
+        const healthBarController = _Controllers_HealthBarController__WEBPACK_IMPORTED_MODULE_9__["HealthBarController"].getInstance(healthBarModel);
+        const healthBarView = new _Views_HealthBarView__WEBPACK_IMPORTED_MODULE_16__["HealthBarView"](healthBarModel, healthBarController);
         this.addChild(healthBarView);
     }
     generateCollisionDetector() {
-        const collisionDetector = _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_3__["CollisionDetector"].getInstance();
+        const collisionDetector = _Components_CollisionDetector_CollisionDetector__WEBPACK_IMPORTED_MODULE_4__["CollisionDetector"].getInstance();
     }
     generateStopButton() {
-        const gameStopButton = new _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_5__["GameStopButton"]();
+        const buttonContinue = new _UI_Buttons_MenuButton__WEBPACK_IMPORTED_MODULE_2__["MenuButton"]("Continue");
+        buttonContinue.visible = false;
+        const gameStopButton = new _Components_GameStopButton_GameStopButton__WEBPACK_IMPORTED_MODULE_6__["GameStopButton"](buttonContinue);
+        this.addChild(buttonContinue);
         this.addChild(gameStopButton);
     }
 }
@@ -46029,7 +46057,7 @@ class TimerView extends _UI_View__WEBPACK_IMPORTED_MODULE_3__["View"] {
     }
     holdLabel() {
         this.x = this.gamefield.pivot.x - this.width / 2;
-        this.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2;
+        this.y = this.gamefield.pivot.y - _Application__WEBPACK_IMPORTED_MODULE_1__["App"].height / 2 + 10;
     }
 }
 
@@ -46832,7 +46860,7 @@ class DefaultTextStyle extends pixi_js__WEBPACK_IMPORTED_MODULE_0__["TextStyle"]
         this.fontWeight = "bold";
         this.fill = ["#E0E0E0"]; // gradient ['#ffffff'; '#00ff99']
         this.stroke = "#4a1850";
-        this.strokeThickness = 5;
+        this.strokeThickness = 3;
         this.dropShadow = false;
         this.dropShadowColor = "#000000";
         this.dropShadowBlur = 4;
@@ -46884,7 +46912,7 @@ __webpack_require__.r(__webpack_exports__);
 class TimerTextStyle extends _DefaultTextStyle__WEBPACK_IMPORTED_MODULE_0__["DefaultTextStyle"] {
     constructor() {
         super();
-        this.fontSize = 40;
+        this.fontSize = 60;
     }
 }
 

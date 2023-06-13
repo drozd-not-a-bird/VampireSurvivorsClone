@@ -1,5 +1,8 @@
 import { Container } from "pixi.js";
 import { App } from "../../../../../Application";
+import { Button } from "../../UI/Buttons/Button";
+import { LabelButton } from "../../UI/Buttons/LabelButton";
+import { MenuButton } from "../../UI/Buttons/MenuButton";
 import { Background } from "./Components/Background/Background";
 import { CollisionDetector } from "./Components/CollisionDetector/CollisionDetector";
 import { EnemySpawner } from "./Components/Enemy/EnemySpawner";
@@ -116,7 +119,10 @@ export class Gamefield extends Container {
   }
 
   private generateStopButton(): void {
-    const gameStopButton = new GameStopButton();
+    const buttonContinue = new MenuButton("Continue");
+    buttonContinue.visible = false;
+    const gameStopButton = new GameStopButton(buttonContinue);
+    this.addChild(buttonContinue);
     this.addChild(gameStopButton);
   }
 }

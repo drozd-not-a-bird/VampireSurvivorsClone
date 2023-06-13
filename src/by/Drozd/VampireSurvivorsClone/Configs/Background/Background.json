@@ -1,0 +1,9 @@
+{
+  "background": {
+    "stepsInWidth": 10,
+    "stepsInHeight": 10,
+    "textureScale": 1,
+    "textureWidth": 512,
+    "textureHeight": 512
+  }
+}

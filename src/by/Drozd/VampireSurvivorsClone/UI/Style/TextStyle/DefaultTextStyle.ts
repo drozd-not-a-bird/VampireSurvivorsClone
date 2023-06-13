@@ -9,7 +9,7 @@ export class DefaultTextStyle extends TextStyle {
     this.fontWeight = "bold";
     this.fill = ["#E0E0E0"]; // gradient ['#ffffff'; '#00ff99']
     this.stroke = "#4a1850";
-    this.strokeThickness = 5;
+    this.strokeThickness = 3;
     this.dropShadow = false;
     this.dropShadowColor = "#000000";
     this.dropShadowBlur = 4;

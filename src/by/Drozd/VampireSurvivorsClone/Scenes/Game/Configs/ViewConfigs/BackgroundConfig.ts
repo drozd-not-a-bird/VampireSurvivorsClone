@@ -1,5 +1,6 @@
 import { Texture } from "pixi.js";
 import { ResourceManager } from "../../../../ResourceManagment/ResourceManager";
+import { background } from "../../../../Configs/Background/Background.json"
 
 export class BackgroundConfig {
   public readonly stepsInWidth: number;
@@ -10,11 +11,11 @@ export class BackgroundConfig {
   public readonly backgroundTileTexture: Texture;
 
   public constructor() {
-    this.stepsInWidth = 10;
-    this.stepsInHeight = 10;
-    this.textureScale = 2;
-    this.textureWidth = 256;
-    this.textureHeight = 256;
+    this.stepsInWidth = background.stepsInWidth;
+    this.stepsInHeight = background.stepsInHeight;
+    this.textureScale = background.textureScale;
+    this.textureWidth = background.textureWidth;
+    this.textureHeight = background.textureHeight;
     const resourceManager = ResourceManager.getInstance();
     this.backgroundTileTexture = resourceManager.getTexture("gamefieldBackgroundTile");
   }
