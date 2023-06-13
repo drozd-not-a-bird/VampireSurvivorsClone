@@ -43960,7 +43960,7 @@ module.exports = JSON.parse("{\"background\":{\"stepsInWidth\":10,\"stepsInHeigh
 /*! exports provided: enemys, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"enemys\":{\"wolf\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"bear\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"drowner\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghoul\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghost\":{\"health\":5,\"movementSpeed\":0.2,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"fiend\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":512,\"height\":512},\"leshy\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":512,\"height\":512}}}");
+module.exports = JSON.parse("{\"enemys\":{\"wolf\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"bear\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"drowner\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghoul\":{\"health\":5,\"movementSpeed\":0.5,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"ghost\":{\"health\":5,\"movementSpeed\":0.2,\"attackSpeed\":3,\"attackRange\":5,\"damage\":5,\"animationSpeed\":0.2,\"width\":500,\"height\":500},\"fiend\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":256,\"height\":256},\"leshy\":{\"health\":5,\"movementSpeed\":1,\"attackSpeed\":3,\"attackRange\":5,\"damage\":555,\"animationSpeed\":0.2,\"width\":256,\"height\":256}}}");
 
 /***/ }),
 
@@ -43971,7 +43971,7 @@ module.exports = JSON.parse("{\"enemys\":{\"wolf\":{\"health\":5,\"movementSpeed
 /*! exports provided: player, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"player\":{\"x\":0,\"y\":0,\"width\":500,\"height\":500,\"animationSpeed\":0.2,\"health\":5,\"movementSpeed\":2,\"attackSpeed\":1,\"attackRange\":1,\"damage\":1}}");
+module.exports = JSON.parse("{\"player\":{\"x\":0,\"y\":0,\"width\":256,\"height\":256,\"animationSpeed\":0.2,\"health\":5,\"movementSpeed\":2,\"attackSpeed\":1,\"attackRange\":1,\"damage\":1}}");
 
 /***/ }),
 

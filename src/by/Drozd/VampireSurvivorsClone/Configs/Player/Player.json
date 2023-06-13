@@ -2,8 +2,8 @@
   "player": {
     "x": 0,
     "y": 0,
-    "width": 500,
-    "height": 500,
+    "width": 256,
+    "height": 256,
     "animationSpeed": 0.2,
     "health": 5,
     "movementSpeed": 2,

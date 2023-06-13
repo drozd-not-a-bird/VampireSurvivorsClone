@@ -57,8 +57,8 @@
       "attackRange": 5,
       "damage": 555,
       "animationSpeed": 0.2,
-      "width": 512,
-      "height": 512
+      "width": 256,
+      "height": 256
     },
     "leshy": {
       "health": 5,
@@ -67,8 +67,8 @@
       "attackRange": 5,
       "damage": 555,
       "animationSpeed": 0.2,
-      "width": 512,
-      "height": 512
+      "width": 256,
+      "height": 256
     }
   }
 }

@@ -1,5 +1,3 @@
 import { Container } from "pixi.js";
 
-export class Scene extends Container {
-    
-}
+export class Scene extends Container {}
